@@ -24,6 +24,15 @@ jobs:
 
       - name: Deploy to Firebase Hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_AUTH_SECRET: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          npx --yes firebase-tools deploy --only hosting --project gen-lang-client-0214744546 --debug
+          if [[ "$FIREBASE_AUTH_SECRET" =~ ^[[:space:]]*\{ ]]; then
+            echo "Google Service Account JSON detectado no secret."
+            echo "$FIREBASE_AUTH_SECRET" > /tmp/firebase_sa_key.json
+            export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase_sa_key.json
+            npx --yes firebase-tools deploy --only hosting --project gen-lang-client-0214744546 --debug
+          else
+            echo "Token CLI de autenticacao detectado no secret."
+            export FIREBASE_TOKEN="$FIREBASE_AUTH_SECRET"
+            npx --yes firebase-tools deploy --only hosting --project gen-lang-client-0214744546 --debug
+          fi
