@@ -1059,7 +1059,7 @@ function showPage(id){
   if(protectedPages.has(id)){
     const unlocked = sessionStorage.getItem('admin_unlocked') === 'true';
     if(!unlocked){
-      const pwd = prompt('Área restrita de Administração. Digite a senha de acesso (ex: ENTRALB):');
+      const pwd = prompt('Área restrita de Administração. Digite a senha de acesso:');
       if(pwd !== 'ENTRALB'){
         if(pwd !== null) alert('Senha incorreta.');
         return;
