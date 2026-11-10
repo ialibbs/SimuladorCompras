@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "comprador",
+      "display_name": "Comprador",
+      "role": "ADMIN",
+      "active": true,
+      "windows_identity": "comprador"
+    }
+  ]
+}

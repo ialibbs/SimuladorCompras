@@ -1,0 +1,28 @@
+{
+  "current": {
+    "versions": {
+      "lc116_nbs": "v1.1",
+      "cindop": "v1.3",
+      "correlation": "v1.2",
+      "cclass": "v1.7"
+    },
+    "checked_at": "2027-01-04T00:00:00.000Z",
+    "updated_at": "2027-01-04T00:00:00.000Z",
+    "update_mode": "manual",
+    "counts": {
+      "lc116": 100,
+      "nbs": 50,
+      "cindop": 20,
+      "correlations": 30,
+      "cclass": 150
+    }
+  },
+  "auto": {
+    "running": false,
+    "ok": true,
+    "changed": false,
+    "message": "Catálogo de referências tributárias e serviços carregado com sucesso.",
+    "finished_at": "2027-01-04T00:00:00.000Z"
+  },
+  "pending": null
+}

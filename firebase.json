@@ -25,6 +25,26 @@
         "destination": "/api/version.json"
       },
       {
+        "source": "/api/keys",
+        "destination": "/api/keys.json"
+      },
+      {
+        "source": "/api/users",
+        "destination": "/api/users.json"
+      },
+      {
+        "source": "/api/catalog/status",
+        "destination": "/api/catalog/status.json"
+      },
+      {
+        "source": "/api/key/status",
+        "destination": "/api/key/status.json"
+      },
+      {
+        "source": "/api/me",
+        "destination": "/api/me.json"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

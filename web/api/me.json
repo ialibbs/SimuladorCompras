@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "user": {
+    "id": 1,
+    "username": "comprador",
+    "display_name": "Comprador (Modo Web)",
+    "role": "ADMIN",
+    "active": true
+  }
+}
