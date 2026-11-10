@@ -26,4 +26,4 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          npx --yes firebase-tools deploy --only hosting --project gen-lang-client-0214744546 --token "$FIREBASE_TOKEN" --non-interactive
+          npx --yes firebase-tools deploy --only hosting --project gen-lang-client-0214744546 --debug
