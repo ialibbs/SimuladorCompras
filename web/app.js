@@ -1054,6 +1054,13 @@ function historyRecord(){const d=dataSet();const suppliers={};d.suppliers.forEac
 function renderHistory(){const rows=filteredHistory();const allHistory=savedHistory();$('historyList').innerHTML=rows.length?rows.map(({x,i,key})=>{const all=Object.values(x.suppliers||{f1:x.f1,f2:x.f2}).filter(Boolean);const originalIndex=allHistory.findIndex(y=>(y.savedAt&&x.savedAt?y.savedAt===x.savedAt:JSON.stringify(y)===JSON.stringify(x)));const checked=HISTORY_SELECTION.has(key)?'checked':'';return `<div class="history-item"><label class="history-check" title="Selecionar esta cotação"><input type="checkbox" ${checked} onchange="toggleHistorySelection('${escapeHtml(key)}',this.checked)"></label><div class="history-main"><h3>${all.map(s=>escapeHtml(s.name||'Fornecedor')).join(' × ')}</h3><p>${x.date||'—'} • Compra: ${x.purchaseDate||'—'} • ${x.operationMode||'Mercadoria'} • ${x.settlement||'Normal'} • ${x.operationMode==='Serviço'?'IBS/CBS na BC ISS: '+(x.ibscbsInIssBase||'Não'):'IBS/CBS na BC ICMS: '+(x.ibscbsInIcmsBase||'Sim')} • ${all.length} cenário(s)</p><small>${all.map(s=>escapeHtml(`${s.cnpj||'sem CNPJ'} | ${s.uf||''} | ${s.regime||''}`)).join(' • ')}</small></div><div><button onclick="loadHistory(${originalIndex})">Abrir</button> <button onclick="deleteHistory(${originalIndex})">Excluir</button></div></div>`}).join(''):'<p class="muted-empty">Nenhuma simulação encontrada.</p>';updateHistorySelectionInfo()}
 window.loadHistory=i=>{const x=savedHistory()[i];$('purchaseDate').value=x.purchaseDate||'2027-01-04';$('buyerUF').value=x.buyerUF||'SP';$('radiDate').value=x.radiDate||'2027-01-31';criterion=x.criterion||criterion;buildCriterionButtons();operationMode=x.operationMode||'Mercadoria';setIbscbsInIcmsBase(x.ibscbsInIcmsBase||'Sim');setIbscbsInIssBase(x.ibscbsInIssBase||'Não');setSettlement(x.settlement||'Normal');const suppliers=x.suppliers||{f1:x.f1,f2:x.f2};bulkRowsBySupplier={};Object.entries(suppliers).forEach(([k,s])=>{if(s?.bulkRows)bulkRowsBySupplier[Number(k.slice(1))]=s.bulkRows;});supplierCount=Math.min(12,Math.max(1,x.supplierCount||Object.values(suppliers).filter(Boolean).length||2));buildSuppliers(suppliers);showPage('simulador')};
 window.deleteHistory=async i=>{try{const all=savedHistory();const record=all[i];const next=all.filter((_,idx)=>idx!==i);HISTORY_CACHE=next;try{localStorage.setItem('simulador_history',JSON.stringify(next));}catch{}if(record?.savedAt){await api('/api/history/delete',{method:'POST',body:JSON.stringify({savedAt:record.savedAt})}).catch(()=>{});}renderHistory()}catch(e){alert('Não foi possível excluir: '+e.message)}}
+function updateAdminLockUI(){
+  const unlocked = sessionStorage.getItem('admin_unlocked') === 'true';
+  document.querySelectorAll('.admin-lock').forEach(el=>{
+    el.textContent = unlocked ? '🔓' : '🔒';
+    el.title = unlocked ? 'Área administrativa desbloqueada' : 'Área restrita (requer senha)';
+  });
+}
 function showPage(id){
   const protectedPages=new Set(['usuarios','atualizacoes','parametros']);
   if(protectedPages.has(id)){
@@ -1065,6 +1072,7 @@ function showPage(id){
         return;
       }
       sessionStorage.setItem('admin_unlocked', 'true');
+      updateAdminLockUI();
     }
   }
   document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('active'));
@@ -1254,7 +1262,7 @@ async function applyCatalog(){
 // --- autenticação e administração V3 ---
 let AUTH={token:'web-direct',user:{id:1,username:'comprador',display_name:'Comprador',role:'ADMIN'}};
 async function api(path,options={}){options.headers={...(options.headers||{}),'Content-Type':'application/json',...(AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{})};const r=await fetch(path,options);let j={};try{j=await r.json()}catch{};if(!r.ok)throw new Error(j.error||'Falha na operação');return j}
-function applyRole(){const admin=true;document.querySelectorAll('.admin-only').forEach(x=>x.classList.remove('role-reader'));if(document.getElementById('currentUserName'))document.getElementById('currentUserName').textContent='Comprador';if(document.getElementById('currentUserRole'))document.getElementById('currentUserRole').textContent='Acesso Web Total';if($('keyAccessBtn'))$('keyAccessBtn').classList.add('hidden');if(admin){loadCatalogStatus();loadUsers();loadReaders();}refreshKeyAccess();}
+function applyRole(){const admin=true;document.querySelectorAll('.admin-only').forEach(x=>x.classList.remove('role-reader'));if(document.getElementById('currentUserName'))document.getElementById('currentUserName').textContent='Comprador';if(document.getElementById('currentUserRole'))document.getElementById('currentUserRole').textContent='Acesso Web Total';if($('keyAccessBtn'))$('keyAccessBtn').classList.add('hidden');if(admin){loadCatalogStatus();loadUsers();loadReaders();}refreshKeyAccess();updateAdminLockUI();}
 
 async function login(e){e.preventDefault();const err=document.getElementById('loginError');err.textContent='';try{const j=await api('/api/login',{method:'POST',body:JSON.stringify({username:document.getElementById('loginUser').value,password:document.getElementById('loginPassword').value})});AUTH=j;sessionStorage.setItem('calc_token',j.token);await loadPrivateHistory();document.getElementById('loginScreen').classList.add('hidden');applyRole();if(j.user.role==='ADMIN')loadUsers()}catch(x){err.textContent=x.message}}
 async function registerAccess(){
