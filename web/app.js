@@ -1079,6 +1079,10 @@ function updateAdminLockUI(){
     el.textContent = unlocked ? '🔓' : '🔒';
     el.title = unlocked ? 'Área administrativa desbloqueada' : 'Área restrita (requer senha)';
   });
+  const nameEl = document.getElementById('currentUserName');
+  if (nameEl) {
+    nameEl.textContent = unlocked ? 'Admin' : 'Comprador';
+  }
 }
 
 function promptAdminAuth() {
