@@ -6,7 +6,7 @@
   "params": {
     "cbs_ref": 0.088,
     "cbs_reduction": 0.001,
-    "cbs_effective": 0.087,
+    "cbs_effective": 0.113,
     "ibs_state": 0.0005,
     "ibs_municipal": 0.0005,
     "annual_rate": 0.12,

@@ -862,9 +862,17 @@ async function saveFiscalConfig(){
   if(AUTH.user?.role!=='ADMIN')throw new Error('Autentique-se como usuário-chave para publicar parâmetros.');
   const params={...DB.params},rates=new Set(['cbs_ref','cbs_reduction','cbs_effective','ibs_state','ibs_municipal','annual_rate','internal_sp','internal_mg','credit_utilization']);
   Object.keys(params).forEach(k=>{let v=Number($(`pm_${k}`).value);if(!Number.isFinite(v))throw new Error('Parâmetro inválido: '+k);params[k]=rates.has(k)?v/100:v;});
-  const extra=JSON.parse($('fiscalConfigEditor').value);extra.rules.product_tax_rules=readSpecialRules();if(DB.catalog?.cclass?.length){extra.rules.cclass_overrides={};for(const row of extra.cclass){const official=DB.catalog.cclass.find(x=>x.code===row.code);if(official){const diff={};for(const key of ['reduction','reductionIbs','reductionCbs','treatment'])if(row[key]!==official[key]&&row[key]!==undefined)diff[key]=row[key];if(Object.keys(diff).length)extra.rules.cclass_overrides[row.code]=diff;}}}const config={schema:1,revision:DB.revision,params,rules:extra.rules,cclass:extra.cclass};
-  const saved=await api('/api/config',{method:'POST',body:JSON.stringify({expected_revision:DB.revision,config})});
-  applyFiscal(saved);buildParams();renderTables();calcAll();alert('Configuração publicada. Os demais acessos carregarão ao reabrir.');
+  const extra=JSON.parse($('fiscalConfigEditor').value);extra.rules.product_tax_rules=readSpecialRules();if(DB.catalog?.cclass?.length){extra.rules.cclass_overrides={};for(const row of extra.cclass){const official=DB.catalog.cclass.find(x=>x.code===row.code);if(official){const diff={};for(const key of ['reduction','reductionIbs','reductionCbs','treatment'])if(row[key]!==official[key]&&row[key]!==undefined)diff[key]=row[key];if(Object.keys(diff).length)extra.rules.cclass_overrides[row.code]=diff;}}}const config={schema:1,revision:(DB.revision||1)+1,params,rules:extra.rules,cclass:extra.cclass};
+  let saved = config;
+  try {
+    saved = await api('/api/config',{method:'POST',body:JSON.stringify({expected_revision:DB.revision,config})});
+  } catch(err) {
+    console.warn('API /api/config POST indisponível. Salvando em localStorage:', err.message);
+  }
+  try {
+    localStorage.setItem('simulador_fiscal_config', JSON.stringify(config));
+  } catch {}
+  applyFiscal(saved);buildParams();renderTables();calcAll();alert('Configuração publicada e salva no navegador com sucesso!');
  }catch(e){alert('Configuração não publicada: '+e.message);}
 }
 function applyFiscal(config){window.CURRENT_FISCAL=config;DB.params=config.params;DB.rules=config.rules;const source=DB.catalog?.cclass?.length?DB.catalog.cclass:config.cclass;DB.cclass=source.map(row=>{const changes={...(config.rules?.cclass_overrides?.[row.code]||{})};if(changes.reduction!==undefined&&changes.reductionIbs===undefined&&changes.reductionCbs===undefined){changes.reductionIbs=changes.reduction;changes.reductionCbs=changes.reduction;}return {...row,...changes};});DB.revision=config.revision;}
@@ -1213,10 +1221,16 @@ async function downloadImportTemplate(){
 }
 function setIbscbsInIssBase(v){ibscbsInIssBase=v;document.querySelectorAll('#ibscbsIssButtons button').forEach(b=>b.classList.toggle('active',b.dataset.value===v));calcAll()}
 function wire(){document.querySelectorAll('.nav[data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));['purchaseDate','radiDate'].forEach(id=>$(id).addEventListener('input',calcAll));$('buyerUF').addEventListener('input',()=>{for(let i=1;i<=supplierCount;i++)refreshFieldStates(`f${i}`);calcAll()});document.querySelectorAll('#settlementButtons button').forEach(b=>b.onclick=()=>setSettlement(b.dataset.value));document.querySelectorAll('#ibscbsIcmsButtons button').forEach(b=>b.onclick=()=>setIbscbsInIcmsBase(b.dataset.value));document.querySelectorAll('#ibscbsIssButtons button').forEach(b=>b.onclick=()=>setIbscbsInIssBase(b.dataset.value));$('addSupplierBtn').onclick=()=>{if(supplierCount>=12)return;const snap=snapshotSuppliers();supplierCount++;snap[`f${supplierCount}`]=supplierDefault(supplierCount);buildSuppliers(snap)};$('removeSupplierBtn').onclick=()=>{if(supplierCount<=1)return;const snap=snapshotSuppliers();delete snap[`f${supplierCount}`];supplierCount--;buildSuppliers(snap)};$('saveBtn').onclick=async()=>{if(!ensureValid('salvar a simulação'))return;try{const record=historyRecord();const next=[record,...savedHistory()];HISTORY_CACHE=next;try{localStorage.setItem('simulador_history',JSON.stringify(next));}catch{}await api('/api/history/append',{method:'POST',body:JSON.stringify({record})}).catch(()=>{});renderHistory();alert('Simulação salva com sucesso no histórico!');}catch(e){alert('Simulação não salva: '+e.message)}};$('resetBtn').onclick=()=>{bulkRowsBySupplier={};supplierCount=2;settlement='Normal';ibscbsInIcmsBase='Sim';ibscbsInIssBase='Não';operationMode='Mercadoria';criterion='Menor custo econômico VP';$('purchaseDate').value='2027-01-04';$('buyerUF').value='SP';$('radiDate').value='2027-01-31';buildCriterionButtons();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');buildSuppliers()};if($('tablesSearch'))$('tablesSearch').addEventListener('input',renderTables);document.querySelectorAll('#dashboardTabs button').forEach(b=>b.onclick=()=>setDashboardView(b.dataset.dash));['historyFrom','historyTo','historySearch'].forEach(id=>$(id).addEventListener('input',renderHistory));$('clearHistoryFilters').onclick=()=>{$('historyFrom').value='';$('historyTo').value='';$('historySearch').value='';renderHistory()};$('saveParams').onclick=saveFiscalConfig;document.querySelectorAll('.export-current').forEach(b=>b.onclick=exportCurrentExcel);if($('exportFilteredBtn'))$('exportFilteredBtn').onclick=exportFilteredHistory;if($('exportSelectedBtn'))$('exportSelectedBtn').onclick=exportSelectedHistory;if($('selectFilteredHistory'))$('selectFilteredHistory').onclick=()=>{filteredHistory().forEach(r=>HISTORY_SELECTION.add(r.key));renderHistory()};if($('clearHistorySelection'))$('clearHistorySelection').onclick=()=>{HISTORY_SELECTION.clear();renderHistory()};document.addEventListener('click',e=>{document.querySelectorAll('.catalog-menu.open').forEach(menu=>{const combo=menu.closest('.catalog-combo');if(combo&&!combo.contains(e.target))menu.classList.remove('open')})})}
+let savedConfigLocally = null;
+try {
+  const localCfg = localStorage.getItem('simulador_fiscal_config');
+  if (localCfg) savedConfigLocally = JSON.parse(localCfg);
+} catch {}
+
 Promise.all([
-  fetch('/api/config').catch(()=>fetch('api/config.json')).then(r=>r.json()).then(c=>{window.INITIAL_FISCAL=c;return fetch('data.json').then(r=>r.json())}),
+  fetch('/api/config').catch(()=>fetch('api/config.json')).then(r=>r.json()).then(c=>{window.INITIAL_FISCAL=savedConfigLocally||c;return fetch('data.json').then(r=>r.json())}).catch(()=>fetch('data.json').then(r=>r.json())),
   fetch('/api/catalog',{cache:'no-store'}).catch(()=>fetch('api/catalog.json')).then(r=>r.json()).catch(()=>({}))
-]).then(([d,cat])=>{DB={...d,cclass:(cat.cclass&&cat.cclass.length?cat.cclass:d.cclass),catalog:{lc116:[],nbs:[],cindop:[],correlations:[],cclass:[],versions:{},...cat}};applyFiscal(window.INITIAL_FISCAL);buildParams();renderTableTabs();renderTables();buildCriterionButtons();wire();buildSuppliers();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');watchCatalogAutoUpdate()});
+]).then(([d,cat])=>{DB={...d,cclass:(cat.cclass&&cat.cclass.length?cat.cclass:d.cclass),catalog:{lc116:[],nbs:[],cindop:[],correlations:[],cclass:[],versions:{},...cat}};applyFiscal(savedConfigLocally||window.INITIAL_FISCAL||d);buildParams();renderTableTabs();renderTables();buildCriterionButtons();wire();buildSuppliers();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');watchCatalogAutoUpdate()});
 
 
 
