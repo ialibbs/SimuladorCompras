@@ -1274,17 +1274,22 @@ async function updateKeySession(){
   applyRole();
 }
 function openKeyForm(mode,username=''){
- const dialog=$('keyDialog');dialog.dataset.mode=mode;dialog.dataset.username=username;
+ const dialog=$('keyDialog');if(!dialog)return;dialog.dataset.mode=mode;dialog.dataset.username=username;
  const labels={login:'Entrar na área restrita',initialize:'Ativar administração tributária',create:'Cadastrar usuário-chave',reset:'Redefinir senha de usuário-chave',password:'Alterar senha administrativa','reader-create':'Cadastrar conta local de simulação','reader-reset':'Redefinir senha local de simulação',recover:'Recuperar administração tributária'};
- $('keyDialogTitle').textContent=labels[mode]||'Área restrita';$('keyError').textContent='';$('keyResult').textContent='';$('keyResult').classList.add('hidden');$('keySubmit').classList.remove('hidden');$('keyForm').reset();
- $('keyNameField').classList.toggle('hidden',!['initialize','create','recover','reader-create'].includes(mode));
- $('keyIdentityField').classList.toggle('hidden',mode!=='create');
- $('keyUsernameField').classList.toggle('hidden',['password','reader-reset'].includes(mode));$('keyUsername').value=username;
- $('keyCurrentField').classList.toggle('hidden',mode!=='password');
- $('keyRecoveryField').classList.toggle('hidden',mode!=='recover');
- $('keyPasswordLabel').firstChild.textContent=mode==='login'?'Senha administrativa':'Nova senha administrativa (mínimo 12 caracteres)';
- $('keyConfirmField').classList.toggle('hidden',mode==='login');
- $('keyDialogNote').textContent=mode==='recover'?'A recuperação desativa as contas-chave anteriores, encerra suas sessões e gera um novo código. O histórico das simulações é preservado.':mode==='create'?'Informe a conta individual do responsável.':mode==='initialize'?'A ativação gera um código de recuperação, exibido uma única vez.':'A autorização vale para parâmetros, catálogos e gestão de usuários-chave.';
+ const title=$('keyDialogTitle');if(title)title.textContent=labels[mode]||'Área restrita';
+ const err=$('keyError');if(err)err.textContent='';
+ const res=$('keyResult');if(res){res.textContent='';res.classList.add('hidden');}
+ const sub=$('keySubmit');if(sub)sub.classList.remove('hidden');
+ const form=$('keyForm');if(form)form.reset();
+ $('keyNameField')?.classList.toggle('hidden',!['initialize','create','recover','reader-create'].includes(mode));
+ $('keyIdentityField')?.classList.toggle('hidden',mode!=='create');
+ $('keyUsernameField')?.classList.toggle('hidden',['password','reader-reset'].includes(mode));
+ const un=$('keyUsername');if(un)un.value=username;
+ $('keyCurrentField')?.classList.toggle('hidden',mode!=='password');
+ $('keyRecoveryField')?.classList.toggle('hidden',mode!=='recover');
+ const pwdLabel=$('keyPasswordLabel');if(pwdLabel&&pwdLabel.firstChild)pwdLabel.firstChild.textContent=mode==='login'?'Senha administrativa':'Nova senha administrativa (mínimo 12 caracteres)';
+ $('keyConfirmField')?.classList.toggle('hidden',mode==='login');
+ const note=$('keyDialogNote');if(note)note.textContent=mode==='recover'?'A recuperação desativa as contas-chave anteriores, encerra suas sessões e gera um novo código. O histórico das simulações é preservado.':mode==='create'?'Informe a conta individual do responsável.':mode==='initialize'?'A ativação gera um código de recuperação, exibido uma única vez.':'A autorização vale para parâmetros, catálogos e gestão de usuários-chave.';
  if(!dialog.open)dialog.showModal();
 }
 function showRecoveryCode(code){
