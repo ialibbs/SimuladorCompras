@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "build": "echo 'No build step required'",
+    "dev": "node sync-data.js && node server.js",
+    "start": "node sync-data.js && node server.js",
+    "build": "node sync-data.js",
     "lint": "node -e \"console.log('Lint passed')\""
   },
   "dependencies": {
