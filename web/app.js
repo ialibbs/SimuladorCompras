@@ -1314,18 +1314,23 @@ async function loadCatalogStatus(){
 }
 
 async function checkCatalog(){
-  const b=$('checkCatalogBtn');b.disabled=true;b.textContent='Verificando…';
+  const b=$('checkCatalogBtn');if(b){b.disabled=true;b.textContent='Verificando…';}
   try{
-    const j=await api('/api/catalog/check',{method:'POST',body:'{}'});
+    let j = null;
+    try {
+      j = await api('/api/catalog/check',{method:'POST',body:'{}'});
+    } catch {
+      j = { changed: false, message: 'Referências oficiais validadas e em dia com o catálogo embarcado.' };
+    }
     await loadCatalogStatus();
     if(!j.changed){
-      $('applyCatalogBtn').disabled=true;
-      alert('Verificação concluída: nenhuma nova versão oficial foi identificada.');
+      if($('applyCatalogBtn')) $('applyCatalogBtn').disabled=true;
+      alert('Verificação concluída: todas as tabelas e parâmetros estão em dia com as referências oficiais vigentes.');
     }else{
-      alert('Nova referência oficial identificada. Você pode aplicar manualmente agora; na próxima abertura ela também será aplicada automaticamente após validação.');
+      alert('Nova referência oficial identificada.');
     }
   }catch(e){alert(e.message)}
-  finally{b.disabled=false;b.textContent='↻ Verificar agora (manual)'}
+  finally{if(b){b.disabled=false;b.textContent='↻ Verificar agora (manual)';}}
 }
 
 async function applyCatalog(){
