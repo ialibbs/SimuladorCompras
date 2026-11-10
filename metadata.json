@@ -1,0 +1,8 @@
+{
+  "name": "Simulador de Compras",
+  "description": "Simulador de Compras e comparador de propostas nacionais, importação direta, serviços e contratos com materiais.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
