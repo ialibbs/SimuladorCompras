@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "gen-lang-client-0214744546"
+  },
+  "targets": {
+    "gen-lang-client-0214744546": {
+      "hosting": {
+        "libbssimulador": [
+          "libbssimulador"
+        ]
+      }
+    }
+  }
+}

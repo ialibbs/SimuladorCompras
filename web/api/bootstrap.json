@@ -1,0 +1,11 @@
+{
+  "mode": "direct",
+  "token": "web-direct",
+  "user": {
+    "id": 1,
+    "username": "comprador",
+    "display_name": "Comprador",
+    "role": "ADMIN",
+    "active": true
+  }
+}

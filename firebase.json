@@ -1,0 +1,44 @@
+{
+  "hosting": {
+    "site": "libbssimulador",
+    "public": "web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/config",
+        "destination": "/api/config.json"
+      },
+      {
+        "source": "/api/catalog",
+        "destination": "/api/catalog.json"
+      },
+      {
+        "source": "/api/bootstrap",
+        "destination": "/api/bootstrap.json"
+      },
+      {
+        "source": "/api/version",
+        "destination": "/api/version.json"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|json)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ]
+  }
+}

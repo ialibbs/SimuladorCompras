@@ -1003,7 +1003,41 @@ function renderDashboard(d){
   setDashboardView(activeDashView);
 }
 function exportPayload(){const d=dataSet();return {version:'5.0.4',configSnapshot:{revision:DB.revision,params:DB.params,rules:DB.rules,cclass:DB.cclass,catalogVersions:DB.catalog.versions},generatedAt:new Date().toISOString(),operationMode,settlement,criterion,purchaseDate:$('purchaseDate').value,buyerUF:$('buyerUF').value,ibscbsInIcmsBase,ibscbsInIssBase,suppliers:d.suppliers,results:d.results.map(r=>({...r,payment:isoDate(r.payment),due:isoDate(r.due),timing:Object.fromEntries(Object.entries(r.timing||{}).map(([k,t])=>[k,{...t,ext:isoDate(t.ext),cash:isoDate(t.cash),outflow:isoDate(t.outflow)}]))}))}}
-async function downloadExcel(payload,filename){try{const r=await fetch('/api/export/excel',{method:'POST',headers:{'Content-Type':'application/json',...(AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{})},body:JSON.stringify(payload)});if(!r.ok){let m='Falha ao exportar';try{m=(await r.json()).error||m}catch{};throw new Error(m)}const blob=await r.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}catch(e){alert(e.message)}}
+async function downloadExcel(payload,filename){
+  try{
+    const r=await fetch('/api/export/excel',{method:'POST',headers:{'Content-Type':'application/json',...(AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{})},body:JSON.stringify(payload)});
+    if(r.ok){
+      const blob=await r.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(u),1500);
+      return;
+    }
+  }catch(e){
+    console.warn('Backend export fallback to XLSX in browser:',e.message);
+  }
+  if(window.XLSX){
+    try{
+      const wb=XLSX.utils.book_new(),{kind,data}=payload||{};
+      if(kind==='history'){
+        const records=Array.isArray(data)?data:[];
+        const rows=records.flatMap(item=>Object.entries(item.suppliers||{}).filter(([,s])=>!!s).map(([k,su])=>({
+          'Salvo em':item.savedAt||'','Data compra':item.purchaseDate||'','Tipo':item.operationMode||'Mercadoria',
+          'Liquidação':item.settlement||'Normal','Critério':item.criterion||'','Cenário':k,
+          'Fornecedor':su.name||'','CNPJ':su.cnpj||'','UF':su.uf||'','Regime':su.regime||'',
+          'Preço base':su.price||0,'Prazo (dias)':su.term||0,'LC 116':su.lc116||'','NBS':su.nbs||'','cClassTrib':su.cclass||''
+        })));
+        XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{}]),'Histórico');
+      }else{
+        const sups=data?.suppliers||[],res=data?.results||[];
+        const summary=sups.map((su,i)=>({'Cenário':`F${i+1}`,'Fornecedor':su.name||'','CNPJ':su.cnpj||'','Regime':su.regime||'','Prazo dias':su.term||0,'Preço final NF':res[i]?.priceNF||0,'Créditos':res[i]?.credits||0,'Custo líquido':res[i]?.net||0,'VP líquido':res[i]?.selectedVP||0,'Crédito útil':res[i]?.creditUseful||0}));
+        XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(summary.length?summary:[{}]),'Resumo Executivo');
+      }
+      XLSX.writeFile(wb,filename);
+      return;
+    }catch(err){alert('Falha ao exportar Excel: '+err.message);return;}
+  }
+  alert('Falha ao exportar.');
+}
 function exportCurrentExcel(){if(!ensureValid('exportar a simulação'))return;downloadExcel({kind:'simulation',data:exportPayload()},`Cotacao_Multiestrategia_${new Date().toISOString().slice(0,10)}.xlsx`)}
 const HISTORY_SELECTION=new Set();
 function historyKey(x,i){return x.savedAt||`legacy-${i}-${x.date||''}`}
@@ -1033,12 +1067,72 @@ function setOperationMode(v){operationMode=v||'Mercadoria';calcAll()}
 function showBulkStatus(message,error=false){const box=$('bulkImportStatus');if(!box)return;box.textContent=message;box.classList.remove('hidden');box.classList.toggle('error',error)}
 async function importBulkExcel(file){
   if(!file)return;
-  try{showBulkStatus('Lendo as abas preenchidas e validando os cenários...');const r=await fetch('/api/import/excel',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Filename':file.name,...(AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{})},body:file});const j=await r.json();if(!r.ok)throw new Error(j.error||'Falha na importação');bulkRowsBySupplier={};Object.entries(j.scenarios||{}).forEach(([k,v])=>bulkRowsBySupplier[Number(k)]=v);supplierCount=Math.max(1,...Object.keys(bulkRowsBySupplier).map(Number));const snap={};for(let i=1;i<=supplierCount;i++){const rows=bulkRowsBySupplier[i]||[],first=rows[0]||supplierDefault(i);const total=rows.reduce((a,x)=>a+Number(x.price||0),0);snap[`f${i}`]={...supplierDefault(i),...first,name:first.name||`Fornecedor ${i}`,price:total,servicePrice:rows.reduce((a,x)=>a+Number(x.servicePrice||0),0),materialPrice:rows.reduce((a,x)=>a+Number(x.materialPrice||0),0),foreignServicePrice:rows.reduce((a,x)=>a+Number(x.foreignServicePrice||0),0)}}buildSuppliers(snap);showBulkStatus(`${j.total_rows} linhas importadas de ${j.sheets_used?.join(', ')||'abas preenchidas'} em ${j.scenario_count} cenário(s). Cálculo por linha e comparação consolidada por fornecedor.`)}catch(e){showBulkStatus(e.message,true)}finally{$('bulkImportFile').value=''}
+  try{
+    showBulkStatus('Lendo as abas preenchidas e validando os cenários...');
+    try{
+      const r=await fetch('/api/import/excel',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Filename':file.name,...(AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{})},body:file});
+      if(r.ok){
+        const j=await r.json();
+        bulkRowsBySupplier={};Object.entries(j.scenarios||{}).forEach(([k,v])=>bulkRowsBySupplier[Number(k)]=v);
+        supplierCount=Math.max(1,...Object.keys(bulkRowsBySupplier).map(Number));
+        const snap={};
+        for(let i=1;i<=supplierCount;i++){
+          const rows=bulkRowsBySupplier[i]||[],first=rows[0]||supplierDefault(i);
+          const total=rows.reduce((a,x)=>a+Number(x.price||0),0);
+          snap[`f${i}`]={...supplierDefault(i),...first,name:first.name||`Fornecedor ${i}`,price:total,servicePrice:rows.reduce((a,x)=>a+Number(x.servicePrice||0),0),materialPrice:rows.reduce((a,x)=>a+Number(x.materialPrice||0),0),foreignServicePrice:rows.reduce((a,x)=>a+Number(x.foreignServicePrice||0),0)}
+        }
+        buildSuppliers(snap);
+        showBulkStatus(`${j.total_rows} linhas importadas de ${j.sheets_used?.join(', ')||'abas preenchidas'} em ${j.scenario_count} cenário(s).`);
+        return;
+      }
+    }catch(err){console.warn('Fallback to client-side XLSX parse:',err);}
+
+    if(window.XLSX){
+      const buffer=await file.arrayBuffer();
+      const wb=XLSX.read(buffer,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws);
+      const scenarios={};
+      rows.forEach(row=>{
+        const sc=row['Cenário']||row['scenario']||1;
+        if(!scenarios[sc])scenarios[sc]=[];
+        scenarios[sc].push({name:row['Fornecedor']||row['name']||`Fornecedor ${sc}`,cnpj:row['CNPJ']||'',uf:row['UF']||'SP',regime:row['Regime']||'Lucro Real',purpose:row['Finalidade']||'Industrialização',cclass:String(row['cClassTrib']||'000001'),price:Number(row['Preço']||row['price']||0),term:Number(row['Prazo (dias)']||row['term']||30),discount:Number(row['Desconto']||0)});
+      });
+      bulkRowsBySupplier=scenarios;
+      supplierCount=Math.max(1,...Object.keys(scenarios).map(Number));
+      const snap={};
+      for(let i=1;i<=supplierCount;i++){
+        const rList=scenarios[i]||[],first=rList[0]||supplierDefault(i);
+        snap[`f${i}`]={...supplierDefault(i),...first,price:rList.reduce((a,x)=>a+Number(x.price||0),0)};
+      }
+      buildSuppliers(snap);
+      showBulkStatus(`${rows.length} linhas importadas da planilha em ${Object.keys(scenarios).length} cenário(s).`);
+    }
+  }catch(e){showBulkStatus(e.message,true)}finally{$('bulkImportFile').value=''}
 }
-async function downloadImportTemplate(){try{const r=await fetch('/api/import/template',{headers:AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{}});if(!r.ok)throw new Error('Não foi possível baixar o modelo.');const blob=await r.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='Modelo_Importacao_Cotacoes_Por_Tipo.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)}catch(e){alert(e.message)}}
+async function downloadImportTemplate(){
+  try{
+    const r=await fetch('/api/import/template',{headers:AUTH.token?{'Authorization':'Bearer '+AUTH.token}:{}});
+    if(r.ok){
+      const blob=await r.blob(),u=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=u;a.download='Modelo_Importacao_Cotacoes_Por_Tipo.xlsx';a.click();
+      setTimeout(()=>URL.revokeObjectURL(u),1500);
+      return;
+    }
+  }catch(e){}
+  if(window.XLSX){
+    const wb=XLSX.utils.book_new();
+    const rows=[{'Cenário':1,'Fornecedor':'Fornecedor Exemplo','CNPJ':'00.000.000/0001-00','UF':'SP','Regime':'Lucro Real','Finalidade':'Industrialização','cClassTrib':'000001','NCM':'8471.30.12','Preço':50000,'Prazo (dias)':30,'Desconto':0}];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Mercadorias');
+    XLSX.writeFile(wb,'Modelo_Importacao_Cotacoes_Por_Tipo.xlsx');
+  }
+}
 function setIbscbsInIssBase(v){ibscbsInIssBase=v;document.querySelectorAll('#ibscbsIssButtons button').forEach(b=>b.classList.toggle('active',b.dataset.value===v));calcAll()}
 function wire(){document.querySelectorAll('.nav[data-page]').forEach(b=>b.onclick=()=>showPage(b.dataset.page));['purchaseDate','radiDate'].forEach(id=>$(id).addEventListener('input',calcAll));$('buyerUF').addEventListener('input',()=>{for(let i=1;i<=supplierCount;i++)refreshFieldStates(`f${i}`);calcAll()});document.querySelectorAll('#settlementButtons button').forEach(b=>b.onclick=()=>setSettlement(b.dataset.value));document.querySelectorAll('#ibscbsIcmsButtons button').forEach(b=>b.onclick=()=>setIbscbsInIcmsBase(b.dataset.value));document.querySelectorAll('#ibscbsIssButtons button').forEach(b=>b.onclick=()=>setIbscbsInIssBase(b.dataset.value));$('addSupplierBtn').onclick=()=>{if(supplierCount>=12)return;const snap=snapshotSuppliers();supplierCount++;snap[`f${supplierCount}`]=supplierDefault(supplierCount);buildSuppliers(snap)};$('removeSupplierBtn').onclick=()=>{if(supplierCount<=1)return;const snap=snapshotSuppliers();delete snap[`f${supplierCount}`];supplierCount--;buildSuppliers(snap)};$('saveBtn').onclick=async()=>{if(!ensureValid('salvar a simulação'))return;try{const record=historyRecord();const next=[record,...savedHistory()];HISTORY_CACHE=next;try{localStorage.setItem('simulador_history',JSON.stringify(next));}catch{}await api('/api/history/append',{method:'POST',body:JSON.stringify({record})}).catch(()=>{});renderHistory();alert('Simulação salva com sucesso no histórico!');}catch(e){alert('Simulação não salva: '+e.message)}};$('resetBtn').onclick=()=>{bulkRowsBySupplier={};supplierCount=2;settlement='Normal';ibscbsInIcmsBase='Sim';ibscbsInIssBase='Não';operationMode='Mercadoria';criterion='Menor custo econômico VP';$('purchaseDate').value='2027-01-04';$('buyerUF').value='SP';$('radiDate').value='2027-01-31';buildCriterionButtons();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');buildSuppliers()};if($('tablesSearch'))$('tablesSearch').addEventListener('input',renderTables);document.querySelectorAll('#dashboardTabs button').forEach(b=>b.onclick=()=>setDashboardView(b.dataset.dash));['historyFrom','historyTo','historySearch'].forEach(id=>$(id).addEventListener('input',renderHistory));$('clearHistoryFilters').onclick=()=>{$('historyFrom').value='';$('historyTo').value='';$('historySearch').value='';renderHistory()};$('saveParams').onclick=saveFiscalConfig;document.querySelectorAll('.export-current').forEach(b=>b.onclick=exportCurrentExcel);if($('exportFilteredBtn'))$('exportFilteredBtn').onclick=exportFilteredHistory;if($('exportSelectedBtn'))$('exportSelectedBtn').onclick=exportSelectedHistory;if($('selectFilteredHistory'))$('selectFilteredHistory').onclick=()=>{filteredHistory().forEach(r=>HISTORY_SELECTION.add(r.key));renderHistory()};if($('clearHistorySelection'))$('clearHistorySelection').onclick=()=>{HISTORY_SELECTION.clear();renderHistory()};document.addEventListener('click',e=>{document.querySelectorAll('.catalog-menu.open').forEach(menu=>{const combo=menu.closest('.catalog-combo');if(combo&&!combo.contains(e.target))menu.classList.remove('open')})})}
-Promise.all([fetch('/api/config').then(r=>r.json()).then(c=>{window.INITIAL_FISCAL=c;return fetch('data.json').then(r=>r.json())}),fetch('/api/catalog',{cache:'no-store'}).then(r=>r.json()).catch(()=>({}))]).then(([d,cat])=>{DB={...d,cclass:(cat.cclass&&cat.cclass.length?cat.cclass:d.cclass),catalog:{lc116:[],nbs:[],cindop:[],correlations:[],cclass:[],versions:{},...cat}};applyFiscal(window.INITIAL_FISCAL);buildParams();renderTableTabs();renderTables();buildCriterionButtons();wire();buildSuppliers();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');watchCatalogAutoUpdate()});
+Promise.all([
+  fetch('/api/config').catch(()=>fetch('api/config.json')).then(r=>r.json()).then(c=>{window.INITIAL_FISCAL=c;return fetch('data.json').then(r=>r.json())}),
+  fetch('/api/catalog',{cache:'no-store'}).catch(()=>fetch('api/catalog.json')).then(r=>r.json()).catch(()=>({}))
+]).then(([d,cat])=>{DB={...d,cclass:(cat.cclass&&cat.cclass.length?cat.cclass:d.cclass),catalog:{lc116:[],nbs:[],cindop:[],correlations:[],cclass:[],versions:{},...cat}};applyFiscal(window.INITIAL_FISCAL);buildParams();renderTableTabs();renderTables();buildCriterionButtons();wire();buildSuppliers();setOperationMode('Mercadoria');setIbscbsInIcmsBase('Sim');setIbscbsInIssBase('Não');setSettlement('Normal');watchCatalogAutoUpdate()});
 
 
 
