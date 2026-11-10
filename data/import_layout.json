@@ -1,0 +1,1566 @@
+{
+  "sheets": {
+    "Mercadorias": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Nome do fornecedor",
+        "type": "text"
+      },
+      {
+        "key": "cnpj",
+        "label": "CNPJ",
+        "type": "text"
+      },
+      {
+        "key": "uf",
+        "label": "UF fornecedor",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "regime",
+        "label": "Regime fornecedor",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "purpose",
+        "label": "Finalidade",
+        "type": "select",
+        "domain": "purposes"
+      },
+      {
+        "key": "transportStartUF",
+        "label": "UF início do transporte",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "transportEndUF",
+        "label": "UF fim do transporte",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "ncm",
+        "label": "NCM",
+        "type": "text"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "price",
+        "label": "Preço base (R$)",
+        "type": "number"
+      },
+      {
+        "key": "freight",
+        "label": "Frete (R$)",
+        "type": "number"
+      },
+      {
+        "key": "insurance",
+        "label": "Seguro (R$)",
+        "type": "number"
+      },
+      {
+        "key": "other",
+        "label": "Outras despesas (R$)",
+        "type": "number"
+      },
+      {
+        "key": "discount",
+        "label": "Desconto incondicional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo pagamento (dias)",
+        "type": "number"
+      },
+      {
+        "key": "negPct",
+        "label": "Redução negociável (%)",
+        "type": "percent"
+      },
+      {
+        "key": "negValue",
+        "label": "Redução negociável (R$)",
+        "type": "number"
+      },
+      {
+        "key": "origin",
+        "label": "Origem — CST (1º dígito)",
+        "type": "select",
+        "domain": "origins"
+      },
+      {
+        "key": "icmsManual",
+        "label": "ICMS manual %",
+        "type": "percent"
+      },
+      {
+        "key": "ipi",
+        "label": "IPI %",
+        "type": "percent"
+      },
+      {
+        "key": "fcp",
+        "label": "FCP %",
+        "type": "percent"
+      },
+      {
+        "key": "is",
+        "label": "IS %",
+        "type": "percent"
+      },
+      {
+        "key": "stMethod",
+        "label": "Método ICMS-ST",
+        "type": "select",
+        "domain": "st"
+      },
+      {
+        "key": "stParam",
+        "label": "MVA ajustada (%) ou base PMC/PMPF/pauta (R$)",
+        "type": "number"
+      },
+      {
+        "key": "stRate",
+        "label": "Alíquota interna da mercadoria para ST (%) — 0 usa padrão da UF",
+        "type": "percent"
+      },
+      {
+        "key": "difalMethod",
+        "label": "Método DIFAL",
+        "type": "select",
+        "domain": "difal"
+      },
+      {
+        "key": "simpIcms",
+        "label": "Crédito ICMS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpCbs",
+        "label": "Crédito CBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpIbs",
+        "label": "Crédito IBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "ipiCredit",
+        "label": "Crédito IPI % do imposto",
+        "type": "percent"
+      },
+      {
+        "key": "freightMode",
+        "label": "Responsabilidade e cobrança do frete",
+        "type": "select",
+        "domain": "freightModes"
+      },
+      {
+        "key": "freightScope",
+        "label": "Tipo do transporte FOB",
+        "type": "select",
+        "domain": "transportScopes"
+      },
+      {
+        "key": "freightRegime",
+        "label": "Regime do transportador FOB",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "freightCclass",
+        "label": "cClassTrib do transporte FOB",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "freightStartDate",
+        "label": "Data início transporte FOB",
+        "type": "date"
+      },
+      {
+        "key": "freightTerm",
+        "label": "Prazo frete FOB desde a data da compra (dias)",
+        "type": "number"
+      },
+      {
+        "key": "freightIcms",
+        "label": "ICMS do transporte FOB (%) — 0 automático",
+        "type": "percent"
+      },
+      {
+        "key": "freightIss",
+        "label": "ISS transporte municipal (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpCbs",
+        "label": "Crédito CBS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpIbs",
+        "label": "Crédito IBS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpIcms",
+        "label": "Crédito ICMS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightCredit",
+        "label": "Crédito IBS/CBS transporte FOB",
+        "type": "select",
+        "domain": "serviceCredit"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ],
+    "CTe": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Nome do fornecedor",
+        "type": "text"
+      },
+      {
+        "key": "cnpj",
+        "label": "CNPJ",
+        "type": "text"
+      },
+      {
+        "key": "uf",
+        "label": "UF fornecedor",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "regime",
+        "label": "Regime fornecedor",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "purpose",
+        "label": "Finalidade",
+        "type": "select",
+        "domain": "purposes"
+      },
+      {
+        "key": "transportStartUF",
+        "label": "UF início do transporte",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "transportEndUF",
+        "label": "UF fim do transporte",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "ncm",
+        "label": "NCM",
+        "type": "text"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "price",
+        "label": "Preço base (R$)",
+        "type": "number"
+      },
+      {
+        "key": "freight",
+        "label": "Frete (R$)",
+        "type": "number"
+      },
+      {
+        "key": "insurance",
+        "label": "Seguro (R$)",
+        "type": "number"
+      },
+      {
+        "key": "other",
+        "label": "Outras despesas (R$)",
+        "type": "number"
+      },
+      {
+        "key": "discount",
+        "label": "Desconto incondicional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo pagamento (dias)",
+        "type": "number"
+      },
+      {
+        "key": "negPct",
+        "label": "Redução negociável (%)",
+        "type": "percent"
+      },
+      {
+        "key": "negValue",
+        "label": "Redução negociável (R$)",
+        "type": "number"
+      },
+      {
+        "key": "origin",
+        "label": "Origem — CST (1º dígito)",
+        "type": "select",
+        "domain": "origins"
+      },
+      {
+        "key": "icmsManual",
+        "label": "ICMS manual %",
+        "type": "percent"
+      },
+      {
+        "key": "ipi",
+        "label": "IPI %",
+        "type": "percent"
+      },
+      {
+        "key": "fcp",
+        "label": "FCP %",
+        "type": "percent"
+      },
+      {
+        "key": "is",
+        "label": "IS %",
+        "type": "percent"
+      },
+      {
+        "key": "stMethod",
+        "label": "Método ICMS-ST",
+        "type": "select",
+        "domain": "st"
+      },
+      {
+        "key": "stParam",
+        "label": "MVA ajustada (%) ou base PMC/PMPF/pauta (R$)",
+        "type": "number"
+      },
+      {
+        "key": "stRate",
+        "label": "Alíquota interna da mercadoria para ST (%) — 0 usa padrão da UF",
+        "type": "percent"
+      },
+      {
+        "key": "difalMethod",
+        "label": "Método DIFAL",
+        "type": "select",
+        "domain": "difal"
+      },
+      {
+        "key": "simpIcms",
+        "label": "Crédito ICMS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpCbs",
+        "label": "Crédito CBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpIbs",
+        "label": "Crédito IBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "ipiCredit",
+        "label": "Crédito IPI % do imposto",
+        "type": "percent"
+      },
+      {
+        "key": "freightMode",
+        "label": "Responsabilidade e cobrança do frete",
+        "type": "select",
+        "domain": "freightModes"
+      },
+      {
+        "key": "freightScope",
+        "label": "Tipo do transporte FOB",
+        "type": "select",
+        "domain": "transportScopes"
+      },
+      {
+        "key": "freightRegime",
+        "label": "Regime do transportador FOB",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "freightCclass",
+        "label": "cClassTrib do transporte FOB",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "freightStartDate",
+        "label": "Data início transporte FOB",
+        "type": "date"
+      },
+      {
+        "key": "freightTerm",
+        "label": "Prazo frete FOB desde a data da compra (dias)",
+        "type": "number"
+      },
+      {
+        "key": "freightIcms",
+        "label": "ICMS do transporte FOB (%) — 0 automático",
+        "type": "percent"
+      },
+      {
+        "key": "freightIss",
+        "label": "ISS transporte municipal (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpCbs",
+        "label": "Crédito CBS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpIbs",
+        "label": "Crédito IBS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightSimpIcms",
+        "label": "Crédito ICMS Simples do frete (%)",
+        "type": "percent"
+      },
+      {
+        "key": "freightCredit",
+        "label": "Crédito IBS/CBS transporte FOB",
+        "type": "select",
+        "domain": "serviceCredit"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ],
+    "Servicos": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Nome do prestador",
+        "type": "text"
+      },
+      {
+        "key": "cnpj",
+        "label": "CNPJ",
+        "type": "text"
+      },
+      {
+        "key": "uf",
+        "label": "UF prestador",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "providerCity",
+        "label": "Município do prestador",
+        "type": "text"
+      },
+      {
+        "key": "buyerCity",
+        "label": "Município do tomador",
+        "type": "text"
+      },
+      {
+        "key": "servicePlace",
+        "label": "Município/local da prestação",
+        "type": "text"
+      },
+      {
+        "key": "regime",
+        "label": "Regime do prestador",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "serviceDescription",
+        "label": "Descrição do serviço",
+        "type": "text"
+      },
+      {
+        "key": "lc116",
+        "label": "Serviço LC 116 — descrição + código",
+        "type": "catalog",
+        "domain": "lc116"
+      },
+      {
+        "key": "nbs",
+        "label": "NBS — descrição + código",
+        "type": "catalog",
+        "domain": "nbs"
+      },
+      {
+        "key": "cindop",
+        "label": "cIndOp",
+        "type": "catalog",
+        "domain": "cindop"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "price",
+        "label": "Preço base do serviço (R$)",
+        "type": "number"
+      },
+      {
+        "key": "other",
+        "label": "Outras despesas (R$)",
+        "type": "number"
+      },
+      {
+        "key": "discount",
+        "label": "Desconto incondicional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo pagamento (dias)",
+        "type": "number"
+      },
+      {
+        "key": "negPct",
+        "label": "Redução negociável (%)",
+        "type": "percent"
+      },
+      {
+        "key": "negValue",
+        "label": "Redução negociável (R$)",
+        "type": "number"
+      },
+      {
+        "key": "issRate",
+        "label": "Alíquota ISS (%) — manual",
+        "type": "percent"
+      },
+      {
+        "key": "issRetained",
+        "label": "ISS retido pelo tomador?",
+        "type": "select",
+        "domain": "yesno"
+      },
+      {
+        "key": "serviceCredit",
+        "label": "Crédito IBS/CBS",
+        "type": "select",
+        "domain": "serviceCredit"
+      },
+      {
+        "key": "simpCbs",
+        "label": "Crédito CBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpIbs",
+        "label": "Crédito IBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "is",
+        "label": "IS %",
+        "type": "percent"
+      },
+      {
+        "key": "irrf",
+        "label": "IRRF (%)",
+        "type": "percent"
+      },
+      {
+        "key": "inss",
+        "label": "INSS (%)",
+        "type": "percent"
+      },
+      {
+        "key": "csll",
+        "label": "CSLL / retenções federais (%)",
+        "type": "percent"
+      },
+      {
+        "key": "otherRet",
+        "label": "Outras retenções (%)",
+        "type": "percent"
+      },
+      {
+        "key": "retentionNote",
+        "label": "Observação das retenções",
+        "type": "text"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ],
+    "Servico_Materiais": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Nome do prestador/fornecedor",
+        "type": "text"
+      },
+      {
+        "key": "cnpj",
+        "label": "CNPJ",
+        "type": "text"
+      },
+      {
+        "key": "uf",
+        "label": "UF",
+        "type": "select",
+        "domain": "uf"
+      },
+      {
+        "key": "regime",
+        "label": "Regime",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "purpose",
+        "label": "Finalidade dos materiais",
+        "type": "select",
+        "domain": "purposes"
+      },
+      {
+        "key": "serviceDescription",
+        "label": "Descrição do serviço",
+        "type": "text"
+      },
+      {
+        "key": "lc116",
+        "label": "Serviço LC 116 — descrição + código",
+        "type": "catalog",
+        "domain": "lc116"
+      },
+      {
+        "key": "nbs",
+        "label": "NBS — descrição + código",
+        "type": "catalog",
+        "domain": "nbs"
+      },
+      {
+        "key": "cindop",
+        "label": "cIndOp",
+        "type": "catalog",
+        "domain": "cindop"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib do serviço",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "servicePrice",
+        "label": "Valor dos serviços (R$)",
+        "type": "number"
+      },
+      {
+        "key": "issRate",
+        "label": "ISS (%)",
+        "type": "percent"
+      },
+      {
+        "key": "issRetained",
+        "label": "ISS retido?",
+        "type": "select",
+        "domain": "yesno"
+      },
+      {
+        "key": "serviceCredit",
+        "label": "Crédito IBS/CBS do serviço",
+        "type": "select",
+        "domain": "serviceCredit"
+      },
+      {
+        "key": "irrf",
+        "label": "IRRF (%)",
+        "type": "percent"
+      },
+      {
+        "key": "inss",
+        "label": "INSS (%)",
+        "type": "percent"
+      },
+      {
+        "key": "csll",
+        "label": "CSLL / retenções federais (%)",
+        "type": "percent"
+      },
+      {
+        "key": "otherRet",
+        "label": "Outras retenções (%)",
+        "type": "percent"
+      },
+      {
+        "key": "materialDescription",
+        "label": "Descrição dos materiais",
+        "type": "text"
+      },
+      {
+        "key": "ncm",
+        "label": "NCM",
+        "type": "text"
+      },
+      {
+        "key": "materialCclass",
+        "label": "cClassTrib dos materiais",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "materialPrice",
+        "label": "Valor dos materiais (R$)",
+        "type": "number"
+      },
+      {
+        "key": "origin",
+        "label": "Origem — CST",
+        "type": "select",
+        "domain": "origins"
+      },
+      {
+        "key": "ipi",
+        "label": "IPI (%)",
+        "type": "percent"
+      },
+      {
+        "key": "fcp",
+        "label": "FCP (%)",
+        "type": "percent"
+      },
+      {
+        "key": "stMethod",
+        "label": "Método ICMS-ST",
+        "type": "select",
+        "domain": "st"
+      },
+      {
+        "key": "stParam",
+        "label": "MVA ajustada (%) ou base PMC/PMPF/pauta (R$)",
+        "type": "number"
+      },
+      {
+        "key": "stRate",
+        "label": "Alíquota interna da mercadoria para ST (%) — 0 usa padrão da UF",
+        "type": "percent"
+      },
+      {
+        "key": "difalMethod",
+        "label": "Método DIFAL",
+        "type": "select",
+        "domain": "difal"
+      },
+      {
+        "key": "simpIcms",
+        "label": "Crédito ICMS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpCbs",
+        "label": "Crédito CBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "simpIbs",
+        "label": "Crédito IBS Simples %",
+        "type": "percent"
+      },
+      {
+        "key": "ipiCredit",
+        "label": "Crédito IPI % do imposto",
+        "type": "percent"
+      },
+      {
+        "key": "other",
+        "label": "Outras despesas (R$)",
+        "type": "number"
+      },
+      {
+        "key": "discount",
+        "label": "Desconto incondicional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo de pagamento (dias)",
+        "type": "number"
+      },
+      {
+        "key": "negPct",
+        "label": "Redução negociável (%)",
+        "type": "percent"
+      },
+      {
+        "key": "negValue",
+        "label": "Redução negociável (R$)",
+        "type": "number"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ],
+    "Import_Mercadorias": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Fornecedor exterior",
+        "type": "text"
+      },
+      {
+        "key": "country",
+        "label": "País de origem",
+        "type": "text"
+      },
+      {
+        "key": "purpose",
+        "label": "Finalidade",
+        "type": "select",
+        "domain": "purposes"
+      },
+      {
+        "key": "ncm",
+        "label": "NCM",
+        "type": "text"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "currency",
+        "label": "Moeda",
+        "type": "select",
+        "domain": "currency"
+      },
+      {
+        "key": "foreignPrice",
+        "label": "Valor da mercadoria na moeda",
+        "type": "number"
+      },
+      {
+        "key": "exchangeRate",
+        "label": "Câmbio aduaneiro (R$)",
+        "type": "number"
+      },
+      {
+        "key": "intlFreight",
+        "label": "Frete internacional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "intlInsurance",
+        "label": "Seguro internacional (R$)",
+        "type": "number"
+      },
+      {
+        "key": "customsAdjustment",
+        "label": "Ajustes do valor aduaneiro (R$)",
+        "type": "number"
+      },
+      {
+        "key": "clearanceDate",
+        "label": "Data prevista de desembaraço",
+        "type": "date"
+      },
+      {
+        "key": "iiRate",
+        "label": "II (%)",
+        "type": "percent"
+      },
+      {
+        "key": "ipi",
+        "label": "IPI (%)",
+        "type": "percent"
+      },
+      {
+        "key": "is",
+        "label": "IS (%)",
+        "type": "percent"
+      },
+      {
+        "key": "siscomexFee",
+        "label": "Taxa Siscomex (R$)",
+        "type": "number"
+      },
+      {
+        "key": "afrmm",
+        "label": "AFRMM (R$)",
+        "type": "number"
+      },
+      {
+        "key": "cide",
+        "label": "CIDE-Combustíveis (R$)",
+        "type": "number"
+      },
+      {
+        "key": "antidumping",
+        "label": "Antidumping/compensatórios/salvaguardas (R$)",
+        "type": "number"
+      },
+      {
+        "key": "otherCustoms",
+        "label": "Outros tributos/taxas até liberação (R$)",
+        "type": "number"
+      },
+      {
+        "key": "icmsImportRate",
+        "label": "ICMS-importação (%)",
+        "type": "percent"
+      },
+      {
+        "key": "localExpenses",
+        "label": "Despesas locais pós-liberação (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo pagamento fornecedor (dias)",
+        "type": "number"
+      },
+      {
+        "key": "negPct",
+        "label": "Redução negociável (%)",
+        "type": "percent"
+      },
+      {
+        "key": "negValue",
+        "label": "Redução negociável (R$)",
+        "type": "number"
+      },
+      {
+        "key": "importIcmsCredit",
+        "label": "Crédito ICMS (% do imposto)",
+        "type": "percent"
+      },
+      {
+        "key": "importIpiCredit",
+        "label": "Crédito IPI (% do imposto)",
+        "type": "percent"
+      },
+      {
+        "key": "ibscbsCredit",
+        "label": "Crédito IBS/CBS (% do imposto)",
+        "type": "percent"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ],
+    "Import_Servicos": [
+      {
+        "key": "calculationBasis",
+        "label": "Simulador — ponto de partida",
+        "type": "select",
+        "domain": "calculationBasis"
+      },
+      {
+        "key": "grossTarget",
+        "label": "Bruto final negociado (R$)",
+        "type": "number"
+      },
+      {
+        "key": "name",
+        "label": "Prestador estrangeiro",
+        "type": "text"
+      },
+      {
+        "key": "foreignTaxId",
+        "label": "Identificação fiscal no exterior",
+        "type": "text"
+      },
+      {
+        "key": "country",
+        "label": "País do prestador",
+        "type": "select",
+        "domain": "countries"
+      },
+      {
+        "key": "currency",
+        "label": "Moeda",
+        "type": "select",
+        "domain": "currency"
+      },
+      {
+        "key": "regime",
+        "label": "Regime do adquirente",
+        "type": "select",
+        "domain": "regimes"
+      },
+      {
+        "key": "serviceNature",
+        "label": "Natureza do pagamento",
+        "type": "select",
+        "domain": "serviceNature"
+      },
+      {
+        "key": "serviceDescription",
+        "label": "Descrição detalhada",
+        "type": "text"
+      },
+      {
+        "key": "lc116",
+        "label": "Serviço LC 116",
+        "type": "catalog",
+        "domain": "lc116"
+      },
+      {
+        "key": "nbs",
+        "label": "NBS",
+        "type": "catalog",
+        "domain": "nbs"
+      },
+      {
+        "key": "cindop",
+        "label": "cIndOp",
+        "type": "catalog",
+        "domain": "cindop"
+      },
+      {
+        "key": "cclass",
+        "label": "cClassTrib",
+        "type": "catalog",
+        "domain": "cClassTrib"
+      },
+      {
+        "key": "consumptionPlace",
+        "label": "Local de consumo/resultado",
+        "type": "text"
+      },
+      {
+        "key": "buyerCity",
+        "label": "Município do tomador",
+        "type": "text"
+      },
+      {
+        "key": "foreignServicePrice",
+        "label": "Valor contratado na moeda",
+        "type": "number"
+      },
+      {
+        "key": "exchangeRate",
+        "label": "Câmbio da remessa (R$)",
+        "type": "number"
+      },
+      {
+        "key": "bankExpenses",
+        "label": "Despesas bancárias/remessa (R$)",
+        "type": "number"
+      },
+      {
+        "key": "term",
+        "label": "Prazo para pagamento (dias)",
+        "type": "number"
+      },
+      {
+        "key": "grossUp",
+        "label": "Contrato possui gross-up de IRRF?",
+        "type": "select",
+        "domain": "yesno"
+      },
+      {
+        "key": "treatyMode",
+        "label": "Tratado — aplicação",
+        "type": "select",
+        "domain": "treatyMode"
+      },
+      {
+        "key": "treatyStatus",
+        "label": "Tratado identificado",
+        "type": "text"
+      },
+      {
+        "key": "irrfImport",
+        "label": "IRRF (%)",
+        "type": "percent"
+      },
+      {
+        "key": "cideImport",
+        "label": "CIDE (%)",
+        "type": "percent"
+      },
+      {
+        "key": "iofFx",
+        "label": "IOF-câmbio (%)",
+        "type": "percent"
+      },
+      {
+        "key": "issRate",
+        "label": "ISS-importação (%)",
+        "type": "percent"
+      },
+      {
+        "key": "serviceCredit",
+        "label": "Crédito IBS/CBS",
+        "type": "select",
+        "domain": "serviceCredit"
+      },
+      {
+        "key": "ibscbsCredit",
+        "label": "Crédito IBS/CBS (% do imposto)",
+        "type": "percent"
+      },
+      {
+        "key": "treatyNote",
+        "label": "Observação/validação fiscal",
+        "type": "text"
+      },
+      {
+        "key": "supplyKind",
+        "label": "Natureza temporal do fornecimento",
+        "type": "select",
+        "domain": "supplyKinds"
+      },
+      {
+        "key": "documentIssueDate",
+        "label": "Data emissão documento fiscal (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "expectedDeliveryDate",
+        "label": "Entrega prevista no documento fiscal",
+        "type": "date"
+      },
+      {
+        "key": "considerationDueDate",
+        "label": "Exigibilidade da contraprestação (continuado)",
+        "type": "date"
+      },
+      {
+        "key": "supplyDate",
+        "label": "Data do fornecimento / entrega (fato gerador)",
+        "type": "date"
+      },
+      {
+        "key": "taxExtinctionDate",
+        "label": "Extinção IBS/CBS prevista (opcional)",
+        "type": "date"
+      },
+      {
+        "key": "advanceSchedule",
+        "label": "Antecipações: JSON [{date,base,documentDate,extinctionDate}]",
+        "type": "text"
+      }
+    ]
+  },
+  "domains": {
+    "uf": [
+      "AC",
+      "AL",
+      "AP",
+      "AM",
+      "BA",
+      "CE",
+      "DF",
+      "ES",
+      "GO",
+      "MA",
+      "MT",
+      "MS",
+      "MG",
+      "PA",
+      "PB",
+      "PR",
+      "PE",
+      "PI",
+      "RJ",
+      "RN",
+      "RS",
+      "RO",
+      "RR",
+      "SC",
+      "SP",
+      "SE",
+      "TO"
+    ],
+    "regimes": [
+      "Lucro Real",
+      "Lucro Presumido",
+      "Simples Nacional",
+      "Simples + IBS/CBS regular",
+      "MEI"
+    ],
+    "purposes": [
+      "Industrialização",
+      "Revenda",
+      "Contratação de transporte (CT-e)",
+      "Ativo imobilizado",
+      "Uso e consumo empresarial",
+      "Brinde",
+      "Bonificação",
+      "Doação",
+      "Amostra grátis",
+      "Uso pessoal",
+      "Outra"
+    ],
+    "origins": [
+      "CST 0 — Nacional (regra geral)",
+      "CST 1 — Estrangeira: importação direta",
+      "CST 2 — Estrangeira: adquirida no mercado interno",
+      "CST 3 — Nacional: conteúdo importado >40% e ≤70%",
+      "CST 4 — Nacional: PPB",
+      "CST 5 — Nacional: conteúdo importado ≤40%",
+      "CST 6 — Estrangeira: importação direta sem similar / CAMEX",
+      "CST 7 — Estrangeira: mercado interno sem similar / CAMEX",
+      "CST 8 — Nacional: conteúdo importado >70%",
+      "Manual / exceção"
+    ],
+    "st": [
+      "Não aplicar",
+      "MVA ajustado",
+      "PMC",
+      "PMPF",
+      "Pauta / preço fixo"
+    ],
+    "difal": [
+      "Base dupla",
+      "Base simples",
+      "Não aplicar"
+    ],
+    "yesno": [
+      "Não",
+      "Sim"
+    ],
+    "currency": [
+      "USD",
+      "EUR",
+      "GBP",
+      "JPY",
+      "CNY",
+      "CHF",
+      "CAD",
+      "MXN",
+      "BRL",
+      "Outra"
+    ],
+    "serviceCredit": [
+      "Automático — regra geral",
+      "Sim — permitir crédito",
+      "Não — bloquear crédito"
+    ],
+    "countries": [
+      "África do Sul",
+      "Alemanha",
+      "Argentina",
+      "Áustria",
+      "Bélgica",
+      "Canadá",
+      "Chile",
+      "China",
+      "Coreia do Sul",
+      "Dinamarca",
+      "Emirados Árabes Unidos",
+      "Equador",
+      "Eslováquia",
+      "Espanha",
+      "Estados Unidos",
+      "Filipinas",
+      "Finlândia",
+      "França",
+      "Hungria",
+      "Índia",
+      "Irlanda",
+      "Israel",
+      "Itália",
+      "Japão",
+      "Luxemburgo",
+      "México",
+      "Noruega",
+      "Países Baixos",
+      "Peru",
+      "Portugal",
+      "Reino Unido",
+      "República Tcheca",
+      "Rússia",
+      "Singapura",
+      "Suécia",
+      "Suíça",
+      "Trinidad e Tobago",
+      "Turquia",
+      "Ucrânia",
+      "Uruguai",
+      "Outro"
+    ],
+    "serviceNature": [
+      "Serviço técnico / assistência técnica",
+      "Serviço administrativo",
+      "Software / SaaS",
+      "Licença / royalty",
+      "Consultoria",
+      "Marketing / publicidade",
+      "Pesquisa e desenvolvimento",
+      "Treinamento",
+      "Frete internacional",
+      "Outro"
+    ],
+    "treatyMode": [
+      "Automático assistido",
+      "Não aplicar tratado",
+      "Manual / validado pelo Fiscal"
+    ],
+    "freightModes": [
+      "CIF — cobrado pelo fornecedor",
+      "CIF — já incluso no preço",
+      "FOB — contratado pelo comprador"
+    ],
+    "transportScopes": [
+      "Nacional intermunicipal/interestadual",
+      "Municipal (ISS)",
+      "Iniciado no exterior"
+    ],
+    "supplyKinds": [
+      "Pontual",
+      "Continuado / fracionado",
+      "Administração pública (art. 473)"
+    ],
+    "calculationBasis": [
+      "Partindo do líquido",
+      "Partindo do bruto"
+    ]
+  }
+}

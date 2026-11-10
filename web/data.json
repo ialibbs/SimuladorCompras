@@ -1,0 +1,631 @@
+{
+  "params": {
+    "cbs_ref": 0.088,
+    "cbs_reduction": 0.001,
+    "cbs_effective": 0.087,
+    "ibs_state": 0.0005,
+    "ibs_municipal": 0.0005,
+    "annual_rate": 0.12,
+    "credit_ibs_cbs_days": 30.0,
+    "credit_icms_days": 30.0,
+    "ciap": 48.0,
+    "radi_days": 0.0,
+    "internal_sp": 0.18,
+    "internal_mg": 0.18,
+    "credit_utilization": 1.0,
+    "tax_due_day": 30.0,
+    "fiscal_cycle": 30.0
+  },
+  "cclass": [
+    {
+      "code": "000001",
+      "cst": "000",
+      "description": "Tributação integral IBS/CBS",
+      "treatment": "Integral",
+      "use": "Geral",
+      "version": "v1.60",
+      "note": "Principal código de tributação integral",
+      "reduction": 0.0
+    },
+    {
+      "code": "000003",
+      "cst": "000",
+      "description": "Regime automotivo incentivado art. 311",
+      "treatment": "Integral",
+      "use": "Específico",
+      "version": "v1.60",
+      "note": "Validar enquadramento",
+      "reduction": 0.0
+    },
+    {
+      "code": "000004",
+      "cst": "000",
+      "description": "Regime automotivo incentivado art. 312",
+      "treatment": "Integral",
+      "use": "Específico",
+      "version": "v1.60",
+      "note": "Validar enquadramento",
+      "reduction": 0.0
+    },
+    {
+      "code": "000005",
+      "cst": "000",
+      "description": "EAC com destinação diversa",
+      "treatment": "Integral",
+      "use": "Combustíveis",
+      "version": "v1.60",
+      "note": "Específico",
+      "reduction": 0.0
+    },
+    {
+      "code": "200002",
+      "cst": "200",
+      "description": "Máquinas/implementos para produtor rural/TAC",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Condições legais específicas",
+      "reduction": 1.0
+    },
+    {
+      "code": "200003",
+      "cst": "200",
+      "description": "Cesta Básica Nacional - Anexo I",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 1.0
+    },
+    {
+      "code": "200004",
+      "cst": "200",
+      "description": "Dispositivos médicos - Anexo XII",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 1.0
+    },
+    {
+      "code": "200009",
+      "cst": "200",
+      "description": "Medicamentos registrados na Anvisa",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Validar produto",
+      "reduction": 1.0
+    },
+    {
+      "code": "200013",
+      "cst": "200",
+      "description": "Itens de higiene menstrual",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Validar produto",
+      "reduction": 1.0
+    },
+    {
+      "code": "200014",
+      "cst": "200",
+      "description": "Hortícolas, frutas e ovos - Anexo XV",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 1.0
+    },
+    {
+      "code": "200022",
+      "cst": "200",
+      "description": "Destino ZFM - operação originada fora",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Condições ZFM",
+      "reduction": 1.0
+    },
+    {
+      "code": "200024",
+      "cst": "200",
+      "description": "Destino ALC - operação originada fora",
+      "treatment": "Alíquota zero",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Condições ALC",
+      "reduction": 1.0
+    },
+    {
+      "code": "200028",
+      "cst": "200",
+      "description": "Serviços de educação - Anexo II",
+      "treatment": "Redução 60%",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Depende da NBS",
+      "reduction": 0.6
+    },
+    {
+      "code": "200029",
+      "cst": "200",
+      "description": "Serviços de saúde humana - Anexo III",
+      "treatment": "Redução 60%",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Depende da NBS",
+      "reduction": 0.6
+    },
+    {
+      "code": "200030",
+      "cst": "200",
+      "description": "Dispositivos médicos - Anexo IV",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 0.6
+    },
+    {
+      "code": "200032",
+      "cst": "200",
+      "description": "Medicamentos - regime reduzido",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Ressalvados os de alíquota zero",
+      "reduction": 0.6
+    },
+    {
+      "code": "200034",
+      "cst": "200",
+      "description": "Alimentos para consumo humano - Anexo VII",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 0.6
+    },
+    {
+      "code": "200035",
+      "cst": "200",
+      "description": "Higiene pessoal e limpeza - Anexo VIII",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Depende do NCM",
+      "reduction": 0.6
+    },
+    {
+      "code": "200036",
+      "cst": "200",
+      "description": "Produtos agropecuários in natura",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Validar requisitos",
+      "reduction": 0.6
+    },
+    {
+      "code": "200038",
+      "cst": "200",
+      "description": "Insumos agropecuários/aquícolas - Anexo IX",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "NCM/NBS",
+      "reduction": 0.6
+    },
+    {
+      "code": "200039",
+      "cst": "200",
+      "description": "Produções artísticas/culturais/eventos - Anexo X",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria/Serviço",
+      "version": "v1.60",
+      "note": "NCM/NBS",
+      "reduction": 0.6
+    },
+    {
+      "code": "200043",
+      "cst": "200",
+      "description": "Bens/serviços de soberania - Anexo XI",
+      "treatment": "Redução 60%",
+      "use": "Mercadoria/Serviço",
+      "version": "v1.60",
+      "note": "Administração pública",
+      "reduction": 0.6
+    },
+    {
+      "code": "200046",
+      "cst": "200",
+      "description": "Operações com bens imóveis",
+      "treatment": "Redução 50%",
+      "use": "Imóveis",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.5
+    },
+    {
+      "code": "200047",
+      "cst": "200",
+      "description": "Bares e restaurantes",
+      "treatment": "Redução 40%",
+      "use": "Serviço/Mercadoria",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.4
+    },
+    {
+      "code": "200048",
+      "cst": "200",
+      "description": "Hotelaria e parques",
+      "treatment": "Redução 40%",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.4
+    },
+    {
+      "code": "200050",
+      "cst": "200",
+      "description": "Transporte aéreo regional",
+      "treatment": "Redução 40%",
+      "use": "Transporte",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.4
+    },
+    {
+      "code": "200051",
+      "cst": "200",
+      "description": "Agências de turismo",
+      "treatment": "Redução 40%",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.4
+    },
+    {
+      "code": "200052",
+      "cst": "200",
+      "description": "Profissões intelectuais",
+      "treatment": "Redução 30%",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Validar atividade",
+      "reduction": 0.3
+    },
+    {
+      "code": "400001",
+      "cst": "400",
+      "description": "Transporte público coletivo urbano",
+      "treatment": "Isenta",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.0
+    },
+    {
+      "code": "400002",
+      "cst": "400",
+      "description": "Transporte público por km rodado",
+      "treatment": "Isenta",
+      "use": "Serviço",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.0
+    },
+    {
+      "code": "410001",
+      "cst": "410",
+      "description": "Bonificação sem evento posterior",
+      "treatment": "Imune / não incidência",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Constar no documento fiscal",
+      "reduction": 0.0
+    },
+    {
+      "code": "410002",
+      "cst": "410",
+      "description": "Transferência entre estabelecimentos do mesmo contribuinte",
+      "treatment": "Imune / não incidência",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Transferência",
+      "reduction": 0.0
+    },
+    {
+      "code": "410003",
+      "cst": "410",
+      "description": "Doação sem contraprestação",
+      "treatment": "Imune / não incidência",
+      "use": "Mercadoria/Serviço",
+      "version": "v1.60",
+      "note": "Condições legais",
+      "reduction": 0.0
+    },
+    {
+      "code": "410026",
+      "cst": "410",
+      "description": "Doação com anulação de crédito",
+      "treatment": "Imune / não incidência",
+      "use": "Mercadoria/Serviço",
+      "version": "v1.60",
+      "note": "Estorno/anulação",
+      "reduction": 0.0
+    },
+    {
+      "code": "410029",
+      "cst": "410",
+      "description": "Operação alcançada apenas por obrigação acessória do ICMS",
+      "treatment": "Imune / não incidência",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Sem IBS/CBS",
+      "reduction": 0.0
+    },
+    {
+      "code": "410030",
+      "cst": "410",
+      "description": "Estorno por perda/roubo/furto/extravio",
+      "treatment": "Imune / não incidência",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Estorno de crédito",
+      "reduction": 0.0
+    },
+    {
+      "code": "410032",
+      "cst": "410",
+      "description": "Tributos fora da base IBS/CBS",
+      "treatment": "Imune / não incidência",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Art. 12",
+      "reduction": 0.0
+    },
+    {
+      "code": "410036",
+      "cst": "410",
+      "description": "Desconto incondicional",
+      "treatment": "Imune / não incidência",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Novo v1.60",
+      "reduction": 0.0
+    },
+    {
+      "code": "410037",
+      "cst": "410",
+      "description": "Importação de bens sem incidência IBS/CBS",
+      "treatment": "Imune / não incidência",
+      "use": "Importação",
+      "version": "v1.60",
+      "note": "Novo v1.60",
+      "reduction": 0.0
+    },
+    {
+      "code": "410999",
+      "cst": "410",
+      "description": "Operação não onerosa não especificada",
+      "treatment": "Imune / não incidência",
+      "use": "Outros",
+      "version": "v1.60",
+      "note": "Validar caso",
+      "reduction": 0.0
+    },
+    {
+      "code": "550009",
+      "cst": "550",
+      "description": "GNL temporário",
+      "treatment": "Suspensão",
+      "use": "Importação",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550010",
+      "cst": "550",
+      "description": "Repetro permanente",
+      "treatment": "Suspensão",
+      "use": "Importação",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550011",
+      "cst": "550",
+      "description": "Repetro industrialização",
+      "treatment": "Suspensão",
+      "use": "Industrialização",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550013",
+      "cst": "550",
+      "description": "Repetro entreposto",
+      "treatment": "Suspensão",
+      "use": "Importação",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550014",
+      "cst": "550",
+      "description": "Zona de Processamento de Exportação",
+      "treatment": "Suspensão",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "ZPE",
+      "reduction": 0.0
+    },
+    {
+      "code": "550015",
+      "cst": "550",
+      "description": "Reporto",
+      "treatment": "Suspensão",
+      "use": "Ativo/Mercadoria",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550016",
+      "cst": "550",
+      "description": "REIDI",
+      "treatment": "Suspensão",
+      "use": "Ativo/Mercadoria",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550022",
+      "cst": "550",
+      "description": "Rehidro",
+      "treatment": "Suspensão",
+      "use": "Mercadoria/Serviço",
+      "version": "v1.60",
+      "note": "Regime especial",
+      "reduction": 0.0
+    },
+    {
+      "code": "550023",
+      "cst": "550",
+      "description": "Hidrocarbonetos não combustíveis",
+      "treatment": "Suspensão",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.0
+    },
+    {
+      "code": "550024",
+      "cst": "550",
+      "description": "Renaval art. 107 II",
+      "treatment": "Suspensão",
+      "use": "Ativo",
+      "version": "v1.60",
+      "note": "Novo v1.60",
+      "reduction": 0.0
+    },
+    {
+      "code": "550025",
+      "cst": "550",
+      "description": "Renaval art. 107 III",
+      "treatment": "Suspensão",
+      "use": "Industrialização",
+      "version": "v1.60",
+      "note": "Novo v1.60",
+      "reduction": 0.0
+    },
+    {
+      "code": "620001",
+      "cst": "620",
+      "description": "Combustíveis - tributação monofásica",
+      "treatment": "Monofásica",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Combustíveis",
+      "reduction": 0.0
+    },
+    {
+      "code": "620002",
+      "cst": "620",
+      "description": "Monofásica com retenção",
+      "treatment": "Monofásica",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Combustíveis",
+      "reduction": 0.0
+    },
+    {
+      "code": "620003",
+      "cst": "620",
+      "description": "Monofásica com retenção por terceiros",
+      "treatment": "Monofásica",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Combustíveis",
+      "reduction": 0.0
+    },
+    {
+      "code": "620006",
+      "cst": "620",
+      "description": "Monofásica cobrada anteriormente",
+      "treatment": "Monofásica",
+      "use": "Mercadoria",
+      "version": "v1.60",
+      "note": "Combustíveis",
+      "reduction": 0.0
+    },
+    {
+      "code": "620007",
+      "cst": "620",
+      "description": "Perda/roubo/extravio no regime monofásico",
+      "treatment": "Monofásica",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Novo v1.60",
+      "reduction": 0.0
+    },
+    {
+      "code": "800002",
+      "cst": "800",
+      "description": "Transferência de crédito de associado para cooperativa",
+      "treatment": "Não tributada",
+      "use": "Cooperativa",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.0
+    },
+    {
+      "code": "810001",
+      "cst": "810",
+      "description": "Crédito presumido em fornecimentos a partir da ZFM",
+      "treatment": "Não tributada",
+      "use": "ZFM",
+      "version": "v1.60",
+      "note": "Crédito presumido",
+      "reduction": 0.0
+    },
+    {
+      "code": "811001",
+      "cst": "811",
+      "description": "Anulação de crédito por saídas imunes/isentas",
+      "treatment": "Não tributada",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Ajuste",
+      "reduction": 0.0
+    },
+    {
+      "code": "811003",
+      "cst": "811",
+      "description": "Desenquadramento do Simples Nacional",
+      "treatment": "Não tributada",
+      "use": "Ajuste",
+      "version": "v1.60",
+      "note": "Ajuste",
+      "reduction": 0.0
+    },
+    {
+      "code": "830001",
+      "cst": "830",
+      "description": "Energia elétrica com exclusão de base IBS/CBS",
+      "treatment": "Integral",
+      "use": "Energia",
+      "version": "v1.60",
+      "note": "Regime específico",
+      "reduction": 0.0
+    }
+  ]
+}

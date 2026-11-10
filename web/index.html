@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulador de Compras • Uso interno</title>
+  <link rel="stylesheet" href="styles.css?v=5.0.4" />
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-brand"><div class="brandmark big">S</div><div><strong>Simulador de Compras</strong><span>Uso interno • acesso individual</span></div></div>
+    <div class="login-copy"><p class="eyebrow">ACESSO AO SISTEMA</p><h1>Bem-vindo</h1><p>Entre com seu usuário para acessar as simulações e análises.</p></div>
+    <form id="loginForm" class="login-form">
+      <label>Usuário<input id="loginUser" autocomplete="username" placeholder="Digite seu usuário" required></label>
+      <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" required></label>
+      <p id="loginError" class="login-error"></p>
+      <button class="primary login-button" type="submit">Entrar</button>
+      <button id="recoverPasswordBtn" type="button">Esqueci minha senha</button><button class="register-first-access" id="registerAccessBtn" type="button"><strong>Primeiro acesso</strong><span>Cadastrar meu usuário e senha</span></button>
+    </form>
+    <small class="login-foot">No primeiro acesso, crie seu usuário e senha. O cadastro e o histórico ficam protegidos neste computador.</small>
+  </div>
+</div>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brandmark">S</div><div><strong>Simulador</strong><span>de Compras</span><span class="sidebar-version">V5.0.4 • USO INTERNO</span></div></div>
+    <nav>
+      <button class="nav active" data-page="simulador"><b>1</b><span>Simulador</span></button>
+      <button class="nav" data-page="fiscal"><b>2</b><span>Análise Fiscal</span></button>
+      <button class="nav" data-page="financeiro"><b>3</b><span>Análise Financeira</span></button>
+      <button class="nav" data-page="recomendacao"><b>4</b><span>Recomendação Final</span></button>
+      <button class="nav" data-page="dashboard">▥ <span>Dashboard</span></button>
+      <button class="nav" data-page="checklist">✓ <span>Checklist</span></button>
+      <div class="nav-sep"></div>
+      <button class="nav admin-only role-reader" data-page="usuarios">♙ <span>Usuários</span></button>
+      <button class="nav admin-only role-reader" data-page="atualizacoes">↻ <span>Atualizações</span></button>
+      <button class="nav" data-page="historico">◷ <span>Histórico</span></button>
+      <button class="nav admin-only role-reader" data-page="parametros">⚙ <span>Parâmetros</span></button>
+      <button class="nav" data-page="tabelas">▦ <span>Tabelas</span></button>
+      <button id="keyAccessBtn" class="nav hidden" type="button">Área restrita</button>
+    </nav>
+    <div class="user-panel"><div><b id="currentUserName">—</b><span id="currentUserRole">—</span></div><button id="changePasswordBtn" type="button">Alterar senha</button><button id="logoutBtn" title="Sair">Sair</button></div>
+    <div class="local-badge"><b>● Aplicação local</b><span>Motor executado neste computador</span></div>
+  </aside>
+
+  <main>
+    <section id="simulador" class="page active">
+      <header class="topbar"><div><p class="eyebrow">ETAPA 1 DE 4</p><h1>Simulador de Compras</h1><p>Compare propostas nacionais, importação direta, serviços e contratos com materiais.</p></div><div class="actions"><button class="ghost" id="bulkImportBtn">⇧ Importar cotação Excel</button><input id="bulkImportFile" type="file" accept=".xlsx" hidden><button class="ghost" id="templateBtn">⇩ Baixar modelo</button><button class="ghost" id="resetBtn">Limpar</button><button class="primary" id="saveBtn">Salvar simulação</button></div></header>
+      <div id="bulkImportStatus" class="bulk-import-status hidden"></div>
+
+      <section class="scenario card">
+        <div class="section-title"><div><span class="step">1</span><div><h2>Cenário da compra</h2><p>Dados comuns a todos os fornecedores.</p></div></div></div>
+
+        <div class="grid scenario-grid">
+          <label>Data da compra<small class="required-text">preenchimento obrigatório</small><input type="date" id="purchaseDate" value="2027-01-04" required></label>
+          <label>UF comprador<small class="required-text">preenchimento obrigatório</small><select id="buyerUF" required><option>SP</option><option>MG</option></select></label>
+          <div class="field-label wide"><span>Operação / liquidação IBS e CBS</span><div class="segmented" id="settlementButtons"><button data-value="Normal" class="active">Normal</button><button data-value="RADI">RADI</button><button data-value="Split Payment">Split Payment</button></div></div>
+          <div class="field-label wide" id="icmsBaseWrap"><span>IBS e CBS compõem a base do ICMS?</span><div class="segmented" id="ibscbsIcmsButtons"><button data-value="Sim" class="active">Sim</button><button data-value="Não">Não</button></div><small class="field-hint"></small></div>
+
+          <div class="field-label wide hidden" id="issBaseWrap"><span>IBS e CBS compõem a base do ISS?</span><div class="segmented" id="ibscbsIssButtons"><button data-value="Não" class="active">Não</button><button data-value="Sim">Sim</button></div><small class="field-hint">Premissa de simulação para serviços. O padrão é NÃO; use SIM apenas para testar o efeito de uma base alternativa.</small></div>
+          <label id="radiWrap" class="hidden">Data RADI<small class="required-text">preenchimento obrigatório</small><input type="date" id="radiDate" value="2027-01-31"></label>
+        </div>
+      </section>
+
+      <div id="validationBanner" class="validation-banner hidden"></div>
+
+      <section class="supplier-toolbar card slim">
+        <div><b id="supplierCountLabel">2 fornecedores em comparação</b><span>Adicione somente quando precisar. Limite: 12 cenários.</span></div>
+        <div class="actions"><button class="ghost" id="removeSupplierBtn">− Remover último</button><button class="primary" id="addSupplierBtn">+ Adicionar fornecedor</button></div>
+      </section>
+
+      <section id="suppliersGrid" class="suppliers-grid"></section>
+
+      <section class="card negotiation-compare">
+        <div class="section-title"><div><span class="step">⇄</span><div><h2>Margem de negociação entre propostas</h2><p>Quanto cada fornecedor precisa reduzir — ou quanto o melhor pode aumentar — para empatar com a proposta de referência.</p></div></div></div>
+        <div id="negotiationCompare" class="negotiation-grid"></div>
+      </section>
+
+      <section class="card executive-preview">
+        <div class="section-title"><div><span class="step">↗</span><div><h2>Prévia comparativa</h2><p>Sem escolher vencedor ainda: apenas os principais resultados lado a lado.</p></div></div></div>
+        <div class="table-scroll"><table id="simSummary"></table></div>
+      </section>
+    </section>
+
+    <section id="fiscal" class="page">
+      <header class="topbar"><div><p class="eyebrow">ETAPA 2 DE 4</p><h1>Análise Fiscal</h1><p>Memória de cálculo, incidências e créditos por fornecedor.</p></div><button class="ghost export-current">⇩ Exportar Excel</button></header>
+      <section class="card"><div class="section-title"><div><span class="step">2</span><div><h2>Memória fiscal consolidada</h2><p>Abra cada fornecedor para ver a composição tributária.</p></div></div></div><div id="fiscalCards" class="analysis-cards"></div></section>
+    </section>
+
+    <section id="financeiro" class="page">
+      <header class="topbar"><div><p class="eyebrow">ETAPA 3 DE 4</p><h1>Análise Financeira</h1><p>Impacto em caixa, prazo e valor presente no modelo selecionado.</p></div><button class="ghost export-current">⇩ Exportar Excel</button></header>
+      <section class="card"><div class="section-title"><div><span class="step">3</span><div><h2>Impacto em caixa</h2><p>Normal × RADI × Split e o efeito financeiro de cada proposta.</p></div></div></div><div id="financialSummary"></div></section>
+    </section>
+
+    <section id="recomendacao" class="page">
+      <header class="topbar"><div><p class="eyebrow">ETAPA 4 DE 4</p><h1>Recomendação Final</h1><p>Agora sim escolha o critério de decisão depois de analisar os cenários.</p></div><button class="ghost export-current">⇩ Exportar Excel</button></header>
+      <section class="card criterion-card"><div class="section-title"><div><span class="step">4</span><div><h2>Critério da recomendação</h2><p>O ranking é recalculado conforme o critério selecionado.</p></div></div></div><div class="criterion-buttons" id="criterionButtons"></div></section>
+      <section class="recommendation" id="recommendation"><span class="trophy">★</span><div><small>RECOMENDAÇÃO AUTOMÁTICA</small><h2 id="recText">—</h2><p id="recSub">Preencha os cenários para comparar.</p></div></section>
+      <section class="card"><div class="section-title"><div><span class="step">#</span><div><h2>Ranking dos fornecedores</h2><p>Comparação do 1º ao último colocado conforme o critério escolhido.</p></div></div></div><div id="ranking"></div></section>
+    </section>
+
+    <section id="dashboard" class="page">
+      <header class="topbar"><div><p class="eyebrow">PAINEL EXECUTIVO DE DECISÃO</p><h1 id="dashboardTitle">Dashboard Gerencial</h1><p id="dashboardSubtitle">A leitura muda automaticamente conforme a cotação seja de Mercadoria ou Serviço.</p></div><button class="primary export-current">⇩ Exportar Excel</button></header>
+      <div class="dashboard-mode-banner" id="dashboardModeBanner"></div>
+      <div class="dash-tabs" id="dashboardTabs"><button data-dash="executiva" class="active">Visão Executiva</button><button data-dash="tributos">Tributos</button><button data-dash="caixa">Caixa</button><button data-dash="negociacao">Negociação</button></div>
+      <div class="dash-view active" id="dash_executiva">
+        <section class="dashboard-kpis" id="dashboardKpis"></section>
+        <section class="card dash-card"><div class="section-title"><div><span class="step">★</span><div><h2>Resumo para decisão</h2><p>Quem está melhor posicionado e por quê.</p></div></div></div><div id="dashExecutiveSummary"></div></section>
+        <section class="dash-grid"><div class="card dash-card"><div class="section-title"><div><span class="step">$</span><div><h2 id="dashCostTitle">Composição econômica</h2><p id="dashCostSubtitle">Preço, créditos e custo efetivo.</p></div></div></div><div id="dashCostBars" class="bar-chart"></div></div><div class="card dash-card"><div class="section-title"><div><span class="step">◎</span><div><h2>Semáforo gerencial</h2><p>Leitura comparativa sem criar uma nota artificial.</p></div></div></div><div id="dashSemaphore" class="semaphore-grid"></div></div></section>
+      </div>
+      <div class="dash-view" id="dash_tributos"><section class="card dash-card"><div class="section-title"><div><span class="step">%</span><div><h2 id="dashTaxTitle">Tributos por cotação</h2><p id="dashTaxSubtitle">Carga aparente, retenções e créditos recuperáveis.</p></div></div></div><div id="dashTaxContent"></div></section></div>
+      <div class="dash-view" id="dash_caixa"><section class="dash-grid"><div class="card dash-card"><div class="section-title"><div><span class="step">↘</span><div><h2>Pressão de caixa</h2><p>Desembolso, prazo, VP e efeito dos créditos.</p></div></div></div><div id="dashCashBars" class="bar-chart"></div></div><div class="card dash-card"><div class="section-title"><div><span class="step">∆</span><div><h2>Benefícios financeiros</h2><p>Prazo comercial e timing tributário separados.</p></div></div></div><div id="dashCashBenefits" class="insight-grid"></div></div></section><section class="card dash-card"><div class="section-title"><div><span class="step">⌁</span><div><h2>Nosso caixa por fornecedor</h2><p>Uma linha por proposta, com saídas efetivas, ganhos de crédito, datas e efeito financeiro.</p></div></div></div><div id="cashTimeline" class="cash-timeline"></div></section></div>
+      <div class="dash-view" id="dash_negociacao"><section class="card dash-card"><div class="section-title"><div><span class="step">⇄</span><div><h2>Meta de negociação</h2><p>Quanto cada proposta precisa reduzir — ou quanto o vencedor ainda pode aumentar — para empatar.</p></div></div></div><div id="dashNegotiation" class="negotiation-grid"></div></section></div>
+      <section class="card dash-card"><div class="section-title"><div><span class="step">◎</span><div><h2>Leitura gerencial</h2><p>Destaques automáticos para apresentação.</p></div></div></div><div id="dashboardInsights" class="insight-grid"></div></section>
+    </section>
+
+    <section id="tabelas" class="page">
+      <header class="topbar"><div><p class="eyebrow">CONSULTA DE PARÂMETROS</p><h1>Tabelas</h1><p>Consulte os catálogos oficiais e as tabelas internas efetivamente utilizadas pelo motor.</p></div></header>
+      <section class="card tables-toolbar"><div class="table-tabs" id="tableTabs"></div><input class="search" id="tablesSearch" placeholder="Buscar código, descrição, tratamento ou parâmetro..."></section>
+      <section class="table-source-note" id="tableSourceNote"></section>
+      <section class="card table-card"><div class="table-scroll"><table><thead id="tablesHead"></thead><tbody id="tablesBody"></tbody></table></div></section>
+    </section>
+
+    <section id="checklist" class="page">
+      <header class="topbar"><div><p class="eyebrow">APOIO AO COMPRADOR</p><h1>Checklist de informações</h1><p>Dados mínimos a solicitar aos fornecedores antes da comparação.</p></div><button class="primary" id="checklistPrintBtn">Imprimir / salvar PDF</button></header>
+      <section class="checklist-grid">
+        <article class="card checklist-card"><h2>Dados gerais da proposta</h2><label><input type="checkbox"> Razão social, CNPJ e regime tributário</label><label><input type="checkbox"> Validade da proposta e prazo de pagamento</label><label><input type="checkbox"> Preço, desconto incondicional e despesas adicionais</label><label><input type="checkbox"> Local de entrega/prestação e prazo de execução</label><label><input type="checkbox"> Opção de liquidação: normal, RADI ou split payment</label></article>
+        <article class="card checklist-card"><h2>Mercadorias</h2><label><input type="checkbox"> Código/SKU, descrição, quantidade e unidade</label><label><input type="checkbox"> NCM e origem/CST</label><label><input type="checkbox"> Finalidade da aquisição</label><label><input type="checkbox"> ICMS, IPI, FCP, ST e respectivos créditos</label><label><input type="checkbox"> Frete, seguro e outras despesas por item</label><label><input type="checkbox"> cClassTrib e tratamento IBS/CBS</label></article>
+        <article class="card checklist-card"><h2>Serviços</h2><label><input type="checkbox"> Descrição detalhada e escopo</label><label><input type="checkbox"> Código LC 116, NBS, cIndOp e cClassTrib</label><label><input type="checkbox"> Municípios do prestador, tomador e execução</label><label><input type="checkbox"> ISS e indicação de retenção</label><label><input type="checkbox"> IRRF, INSS, CSLL e outras retenções</label><label><input type="checkbox"> Separação entre mão de obra e materiais, quando houver</label></article>
+        <article class="card checklist-card"><h2>Transporte — CT-e</h2><label><input type="checkbox"> UF de início e UF de término da prestação</label><label><input type="checkbox"> Valor do frete/prestação e modal</label><label><input type="checkbox"> Regime tributário da transportadora</label><label><input type="checkbox"> Alíquota e destaque de ICMS</label><label><input type="checkbox"> Tomador do serviço e responsável pelo pagamento</label><label><input type="checkbox"> cClassTrib e tratamento IBS/CBS</label></article>
+        <article class="card checklist-card"><h2>Importação direta</h2><label><input type="checkbox"> País, moeda, valor e câmbio aduaneiro</label><label><input type="checkbox"> NCM, finalidade e cClassTrib</label><label><input type="checkbox"> Frete/seguro internacional e ajustes aduaneiros</label><label><input type="checkbox"> II, IPI, IS, AFRMM e demais encargos</label><label><input type="checkbox"> Data e UF do desembaraço</label></article>
+        <article class="card checklist-card"><h2>Serviço + materiais</h2><label><input type="checkbox"> Valores separados de serviço e materiais</label><label><input type="checkbox"> Documento fiscal previsto para cada parcela</label><label><input type="checkbox"> LC 116/NBS do serviço</label><label><input type="checkbox"> NCM/origem de cada material</label><label><input type="checkbox"> Regras de retenção e créditos por componente</label><label><input type="checkbox"> Responsabilidade pelo fornecimento dos materiais</label></article>
+      </section>
+    </section>
+
+    <section id="usuarios" class="page admin-only role-reader">
+      <header class="topbar"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários-chave tributários</h1><p>Autorize responsáveis individuais para parâmetros e sustentação tributária.</p></div><button class="primary" id="newUserBtn">+ Novo usuário-chave</button></header>
+      <section class="card"><h2>Responsáveis tributários</h2><div id="usersList" class="users-list"></div><div class="actions"><button id="keyOwnPasswordBtn">Alterar minha senha administrativa</button><button id="rotateRecoveryBtn">Substituir código de recuperação</button></div></section><section class="card"><h2>Contas locais de simulação</h2><p>Essas contas permitem entrar na modalidade com login e não concedem permissão tributária.</p><button id="newReaderBtn">+ Nova conta local</button><div id="localUsersList" class="users-list"></div></section>
+    </section>
+    <section id="atualizacoes" class="page admin-only role-reader">
+      <header class="topbar"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Atualizações</h1><p>Acompanhe as referências oficiais aplicadas pelo simulador e a última verificação automática.</p></div></header>
+      <section class="card update-card"><div class="update-status"><span class="step">✓</span><div><h2>Referências oficiais</h2><p id="appVersion">Uso interno • homologação TI</p></div></div><div class="catalog-status" id="catalogStatus"><p>Carregando situação dos catálogos...</p></div><div class="actions"><button class="ghost" id="checkCatalogBtn">↻ Verificar agora (manual)</button><button class="primary" id="applyCatalogBtn" disabled>Aplicar versão preparada</button></div><div class="update-note"><b>Governança do catálogo</b><p>O aplicativo consulta Portal NFS-e/Receita e Portal NF-e. Ao abrir o simulador, as fontes oficiais são verificadas automaticamente. Uma nova versão só é aplicada quando houver mudança válida; a versão anterior permanece em backup para rollback. Se não houver mudança, nada é alterado. A verificação manual permanece disponível.</p></div></section>
+    </section>
+
+    <section id="historico" class="page">
+      <header class="topbar"><div><p class="eyebrow">SIMULAÇÕES SALVAS</p><h1>Histórico</h1><p>Filtre e exporte todas as cotações, um período, um fornecedor ou apenas as cotações selecionadas.</p></div></header>
+      <section class="card history-filter-card"><div class="history-export-title"><div><span class="step">⇩</span></div><div><h2>Exportação do histórico de cotações</h2><p>Escolha os filtros abaixo. Você pode exportar tudo, um período, um fornecedor ou cotações marcadas individualmente.</p></div></div><div class="history-filters"><label>Data inicial<input type="date" id="historyFrom"></label><label>Data final<input type="date" id="historyTo"></label><label class="history-search">Fornecedor / CNPJ / termo<input id="historySearch" placeholder="Ex.: 12.345.678/0001-90, ABC Ltda, MG..."></label><button class="ghost" id="clearHistoryFilters">Limpar filtros</button></div><div class="history-export-bar"><div><b id="historyFilterCount">0 cotação(ões) encontrada(s)</b><span id="historySelectedCount">0 selecionada(s)</span></div><div class="actions"><button class="ghost" id="selectFilteredHistory">Selecionar filtradas</button><button class="ghost" id="clearHistorySelection">Limpar seleção</button><button class="primary" id="exportFilteredBtn">⇩ Exportar resultado dos filtros</button><button class="primary" id="exportSelectedBtn">⇩ Exportar somente selecionadas</button></div></div><p class="history-export-note">“Filtradas” respeita período e fornecedor/termo. Para cotações aleatórias, marque individualmente e use “Exportar selecionadas”. Sem filtros, “Exportar filtradas” exporta todo o histórico.</p></section>
+      <div class="card"><div id="historyList" class="history-list"></div></div>
+    </section>
+
+    <section id="parametros" class="page admin-only role-reader"><header class="topbar"><div><p class="eyebrow">MOTOR DO SIMULADOR</p><h1>Parâmetros</h1><p>Premissas tributárias e financeiras utilizadas pelo motor.</p></div></header><div class="card"><div id="paramsForm" class="params-grid"></div><div class="footer-actions"><button class="primary" id="saveParams">Aplicar parâmetros</button></div></div></section>
+  </main>
+</div>
+<dialog id="keyDialog" style="max-width:660px;width:90%;border:0;border-radius:18px;padding:28px;color:#173B60">
+<h2 id="keyDialogTitle">Área restrita</h2><p id="keyDialogNote"></p>
+<form id="keyForm" class="login-form">
+<label id="keyNameField">Nome do responsável<input id="keyName" autocomplete="name"></label>
+<label id="keyIdentityField">Conta Windows (DOMÍNIO\usuário)<input id="keyIdentity" autocomplete="off"></label>
+<label id="keyUsernameField">Usuário-chave<input id="keyUsername" autocomplete="username"></label>
+<label id="keyCurrentField">Senha administrativa atual<input id="keyCurrent" type="password" autocomplete="current-password"></label>
+<label id="keyRecoveryField">Código de recuperação<input id="keyRecovery" type="password" autocomplete="off"></label>
+<label id="keyPasswordLabel">Senha administrativa<input id="keyPassword" type="password" autocomplete="off"></label>
+<label id="keyConfirmField">Confirme a nova senha<input id="keyConfirm" type="password" autocomplete="off"></label>
+<p id="keyError" role="alert"></p><p id="keyResult" class="hidden" style="overflow-wrap:anywhere;user-select:all;background:#edf3f8;padding:16px"></p>
+<button id="keySubmit" class="primary" type="submit">Confirmar</button><button id="keyRecoverLink" type="button">Recuperar administração</button><button id="keyClose" type="button">Fechar</button>
+</form></dialog>
+<script src="app.js?v=5.0.4"></script>
+<div id="catalogToast" class="catalog-toast hidden"></div>
+</body>
+</html>
