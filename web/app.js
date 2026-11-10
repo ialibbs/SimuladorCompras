@@ -1056,7 +1056,17 @@ window.loadHistory=i=>{const x=savedHistory()[i];$('purchaseDate').value=x.purch
 window.deleteHistory=async i=>{try{const all=savedHistory();const record=all[i];const next=all.filter((_,idx)=>idx!==i);HISTORY_CACHE=next;try{localStorage.setItem('simulador_history',JSON.stringify(next));}catch{}if(record?.savedAt){await api('/api/history/delete',{method:'POST',body:JSON.stringify({savedAt:record.savedAt})}).catch(()=>{});}renderHistory()}catch(e){alert('Não foi possível excluir: '+e.message)}}
 function showPage(id){
   const protectedPages=new Set(['usuarios','atualizacoes','parametros']);
-  if(protectedPages.has(id)&&AUTH.user?.role!=='ADMIN'){id='simulador'}
+  if(protectedPages.has(id)){
+    const unlocked = sessionStorage.getItem('admin_unlocked') === 'true';
+    if(!unlocked){
+      const pwd = prompt('Área restrita de Administração. Digite a senha de acesso (ex: ENTRALB):');
+      if(pwd !== 'ENTRALB'){
+        if(pwd !== null) alert('Senha incorreta.');
+        return;
+      }
+      sessionStorage.setItem('admin_unlocked', 'true');
+    }
+  }
   document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('active'));
   const b=document.querySelector(`[data-page="${id}"]`);if(b)b.classList.add('active');
   const pg=$(id);if(pg)pg.classList.add('active');
