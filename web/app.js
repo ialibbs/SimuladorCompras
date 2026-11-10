@@ -1054,25 +1054,87 @@ function historyRecord(){const d=dataSet();const suppliers={};d.suppliers.forEac
 function renderHistory(){const rows=filteredHistory();const allHistory=savedHistory();$('historyList').innerHTML=rows.length?rows.map(({x,i,key})=>{const all=Object.values(x.suppliers||{f1:x.f1,f2:x.f2}).filter(Boolean);const originalIndex=allHistory.findIndex(y=>(y.savedAt&&x.savedAt?y.savedAt===x.savedAt:JSON.stringify(y)===JSON.stringify(x)));const checked=HISTORY_SELECTION.has(key)?'checked':'';return `<div class="history-item"><label class="history-check" title="Selecionar esta cotação"><input type="checkbox" ${checked} onchange="toggleHistorySelection('${escapeHtml(key)}',this.checked)"></label><div class="history-main"><h3>${all.map(s=>escapeHtml(s.name||'Fornecedor')).join(' × ')}</h3><p>${x.date||'—'} • Compra: ${x.purchaseDate||'—'} • ${x.operationMode||'Mercadoria'} • ${x.settlement||'Normal'} • ${x.operationMode==='Serviço'?'IBS/CBS na BC ISS: '+(x.ibscbsInIssBase||'Não'):'IBS/CBS na BC ICMS: '+(x.ibscbsInIcmsBase||'Sim')} • ${all.length} cenário(s)</p><small>${all.map(s=>escapeHtml(`${s.cnpj||'sem CNPJ'} | ${s.uf||''} | ${s.regime||''}`)).join(' • ')}</small></div><div><button onclick="loadHistory(${originalIndex})">Abrir</button> <button onclick="deleteHistory(${originalIndex})">Excluir</button></div></div>`}).join(''):'<p class="muted-empty">Nenhuma simulação encontrada.</p>';updateHistorySelectionInfo()}
 window.loadHistory=i=>{const x=savedHistory()[i];$('purchaseDate').value=x.purchaseDate||'2027-01-04';$('buyerUF').value=x.buyerUF||'SP';$('radiDate').value=x.radiDate||'2027-01-31';criterion=x.criterion||criterion;buildCriterionButtons();operationMode=x.operationMode||'Mercadoria';setIbscbsInIcmsBase(x.ibscbsInIcmsBase||'Sim');setIbscbsInIssBase(x.ibscbsInIssBase||'Não');setSettlement(x.settlement||'Normal');const suppliers=x.suppliers||{f1:x.f1,f2:x.f2};bulkRowsBySupplier={};Object.entries(suppliers).forEach(([k,s])=>{if(s?.bulkRows)bulkRowsBySupplier[Number(k.slice(1))]=s.bulkRows;});supplierCount=Math.min(12,Math.max(1,x.supplierCount||Object.values(suppliers).filter(Boolean).length||2));buildSuppliers(suppliers);showPage('simulador')};
 window.deleteHistory=async i=>{try{const all=savedHistory();const record=all[i];const next=all.filter((_,idx)=>idx!==i);HISTORY_CACHE=next;try{localStorage.setItem('simulador_history',JSON.stringify(next));}catch{}if(record?.savedAt){await api('/api/history/delete',{method:'POST',body:JSON.stringify({savedAt:record.savedAt})}).catch(()=>{});}renderHistory()}catch(e){alert('Não foi possível excluir: '+e.message)}}
+const ADMIN_SECRET_B64 = 'RU5UUkFMQg==';
+
+function isAdminUnlocked() {
+  const token = sessionStorage.getItem('admin_token');
+  if (!token) return false;
+  try {
+    const decoded = atob(token);
+    return decoded.startsWith('libbs_admin_ok_' + ADMIN_SECRET_B64);
+  } catch {
+    return false;
+  }
+}
+
+function setAdminUnlocked() {
+  const token = btoa('libbs_admin_ok_' + ADMIN_SECRET_B64 + '_' + location.hostname + '_' + Date.now());
+  sessionStorage.setItem('admin_token', token);
+  updateAdminLockUI();
+}
+
 function updateAdminLockUI(){
-  const unlocked = sessionStorage.getItem('admin_unlocked') === 'true';
+  const unlocked = isAdminUnlocked();
   document.querySelectorAll('.admin-lock').forEach(el=>{
     el.textContent = unlocked ? '🔓' : '🔒';
     el.title = unlocked ? 'Área administrativa desbloqueada' : 'Área restrita (requer senha)';
   });
 }
-function showPage(id){
+
+function promptAdminAuth() {
+  return new Promise((resolve) => {
+    const dialog = $('adminAuthDialog');
+    if (!dialog) {
+      resolve(false);
+      return;
+    }
+    const input = $('adminPasswordInput');
+    const err = $('adminAuthError');
+    const form = $('adminAuthForm');
+    const cancelBtn = $('adminAuthCancel');
+    
+    if (input) input.value = '';
+    if (err) err.textContent = '';
+    
+    const cleanup = () => {
+      form.onsubmit = null;
+      cancelBtn.onclick = null;
+      if (dialog.open) dialog.close();
+    };
+    
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      try {
+        const val = input.value.trim();
+        if (btoa(val) === ADMIN_SECRET_B64) {
+          setAdminUnlocked();
+          cleanup();
+          resolve(true);
+        } else {
+          if (err) err.textContent = 'Senha incorreta.';
+          if (input) input.focus();
+        }
+      } catch {
+        if (err) err.textContent = 'Erro ao validar senha.';
+      }
+    };
+    
+    cancelBtn.onclick = () => {
+      cleanup();
+      resolve(false);
+    };
+    
+    if (!dialog.open) dialog.showModal();
+    if (input) input.focus();
+  });
+}
+
+async function showPage(id){
   const protectedPages=new Set(['usuarios','atualizacoes','parametros']);
   if(protectedPages.has(id)){
-    const unlocked = sessionStorage.getItem('admin_unlocked') === 'true';
-    if(!unlocked){
-      const pwd = prompt('Área restrita de Administração. Digite a senha de acesso:');
-      if(pwd !== 'ENTRALB'){
-        if(pwd !== null) alert('Senha incorreta.');
-        return;
-      }
-      sessionStorage.setItem('admin_unlocked', 'true');
-      updateAdminLockUI();
+    if(!isAdminUnlocked()){
+      const success = await promptAdminAuth();
+      if(!success) return;
     }
   }
   document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('active'));

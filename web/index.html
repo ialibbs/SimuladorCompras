@@ -42,15 +42,15 @@
       <button class="nav" data-page="recomendacao"><b>4</b><span>Recomendação Final</span></button>
       <button class="nav" data-page="dashboard">▥ <span>Dashboard</span></button>
       <button class="nav" data-page="checklist">✓ <span>Checklist</span></button>
+      <button class="nav" data-page="historico">◷ <span>Histórico</span></button>
+      <button class="nav" data-page="tabelas">▦ <span>Tabelas</span></button>
       <div class="nav-sep"></div>
       <button class="nav admin-only role-reader" data-page="usuarios">♙ <span>Usuários</span><span class="admin-lock" style="margin-left:auto;font-size:10px;">🔒</span></button>
       <button class="nav admin-only role-reader" data-page="atualizacoes">↻ <span>Atualizações</span><span class="admin-lock" style="margin-left:auto;font-size:10px;">🔒</span></button>
-      <button class="nav" data-page="historico">◷ <span>Histórico</span></button>
       <button class="nav admin-only role-reader" data-page="parametros">⚙ <span>Parâmetros</span><span class="admin-lock" style="margin-left:auto;font-size:10px;">🔒</span></button>
-      <button class="nav" data-page="tabelas">▦ <span>Tabelas</span></button>
       <button id="keyAccessBtn" class="nav hidden" type="button">Área restrita</button>
     </nav>
-    <div class="user-panel"><div><b id="currentUserName">—</b><span id="currentUserRole">—</span></div><button id="changePasswordBtn" type="button">Alterar senha</button><button id="logoutBtn" title="Sair">Sair</button></div>
+    <div class="user-panel"><div><b id="currentUserName">—</b></div><button id="changePasswordBtn" type="button">Alterar senha</button><button id="logoutBtn" title="Sair">Sair</button></div>
     <div class="local-badge"><b>● Aplicação local</b><span>Motor executado neste computador</span></div>
   </aside>
 
@@ -179,5 +179,17 @@
 <script src="xlsx.full.min.js"></script>
 <script src="app.js?v=5.0.4"></script>
 <div id="catalogToast" class="catalog-toast hidden"></div>
+<dialog id="adminAuthDialog" style="max-width:420px;width:90%;border:0;border-radius:18px;padding:26px;color:#173B60;box-shadow:0 20px 50px rgba(0,0,0,.25)">
+  <h2 style="margin:0 0 8px;font-size:18px;">Área Administrativa</h2>
+  <p style="margin:0 0 16px;font-size:12px;color:#536b80;">Digite a senha de administrador para acessar:</p>
+  <form id="adminAuthForm" style="display:grid;gap:12px;">
+    <input type="password" id="adminPasswordInput" placeholder="Senha de acesso" required style="padding:12px;border:1px solid #dce6ef;border-radius:10px;font-size:14px;width:100%;">
+    <p id="adminAuthError" style="color:#b42318;font-size:11px;margin:0;min-height:16px;"></p>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px;">
+      <button type="button" id="adminAuthCancel" class="ghost" style="padding:9px 14px;cursor:pointer;">Cancelar</button>
+      <button type="submit" class="primary" style="padding:9px 16px;cursor:pointer;">Entrar</button>
+    </div>
+  </form>
+</dialog>
 </body>
 </html>
